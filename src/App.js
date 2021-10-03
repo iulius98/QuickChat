@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+//import logo from "./logo.svg";
+import "./styles/App.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React from "react";
+import Typography from "@mui/material/Typography";
+import ChatRoom from "./components/chatroom/ChatRoom";
+import MyAppBar from "./components/AppBar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// App material themes
+const darkTheme = createTheme({
+  palette: {
+    type: "dark",
+  },
+});
+
+const lightTheme = createTheme({});
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDark: false,
+    };
+  }
+
+  render() {
+    // const { classes } = this.props;
+    return (
+      <ThemeProvider theme={this.state.isDark ? { ...darkTheme } : { ...lightTheme }}>
+        <MyAppBar />
+        <div className="AppContainer">
+          <div className="Groups">
+            <Typography variant="h5">This is the groups list</Typography>
+          </div>
+
+          <div className="ChatRoom">
+            <ChatRoom />
+          </div>
+        </div>
+      </ThemeProvider>
+    );
+  }
 }
-
-export default App;
