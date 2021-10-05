@@ -6,7 +6,6 @@ import { makeStyles } from "@mui/styles";
 const messageStyles = makeStyles((theme) => {
   return {
     paper: {
-      backgroundColor: "transparent",
       width: "50%",
       margin: "2%",
       float: (props) => {
@@ -36,15 +35,15 @@ export default function MessageBox(props) {
   const classes = messageStyles(props);
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} color="primary">
       <Typography variant="h6" className={classes.author}>
         {props.author}
       </Typography>
       <Typography variant="body2" className={classes.messageBody}>
-        {props.messageBody}
+        {props.content}
       </Typography>
       <Typography variant="subtitle2" className={classes.timestamp}>
-        {new Date(props.timestamp).toLocaleTimeString().substr(0, 4)}
+        {new Date(props.timestamp).toLocaleTimeString().substr(0, 5)}
       </Typography>
     </Paper>
   );

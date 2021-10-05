@@ -3,7 +3,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 1.4fr;
-  grid-template-rows: 6fr 1fr;
+  grid-template-rows: 5.7fr 1.3fr;
   grid-auto-columns: 1fr;
   gap: 5px 0px;
   grid-auto-flow: row;
@@ -21,4 +21,5 @@
   grid-area: NewMessageBox;
   background-color: gold;
   min-height: 0;
+  top: 0;
 }
