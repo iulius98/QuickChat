@@ -1,10 +1,13 @@
-//import logo from "./logo.svg";
-import "./styles/App.css";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
-import Typography from "@mui/material/Typography";
-import ChatRoom from "./components/chatroom/ChatRoom";
+import "./styles/App.css";
+
+import store from "./app/store";
+import { Provider } from "react-redux";
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ChatRoom from "./components/chat/ChatRoom";
 import MyAppBar from "./components/AppBar";
+import UsersList from "./components/chat/UsersList";
 
 // App material themes
 const darkTheme = createTheme({
@@ -27,16 +30,18 @@ export default class App extends React.Component {
     // const { classes } = this.props;
     return (
       <ThemeProvider theme={this.state.isDark ? { ...darkTheme } : { ...lightTheme }}>
-        <MyAppBar />
-        <div className="AppContainer">
-          <div className="Groups">
-            <Typography variant="h5">This is the groups list</Typography>
-          </div>
+        <Provider store={store}>
+          <MyAppBar />
+          <div className="AppContainer">
+            <div className="Groups">
+              <UsersList />
+            </div>
 
-          <div className="ChatRoom">
-            <ChatRoom />
+            <div className="ChatRoom">
+              <ChatRoom />
+            </div>
           </div>
-        </div>
+        </Provider>
       </ThemeProvider>
     );
   }
