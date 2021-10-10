@@ -8,6 +8,7 @@ const messageStyles = makeStyles((theme) => {
     paper: {
       width: "50%",
       margin: "2%",
+      wordWrap: "break-word",
       float: (props) => {
         if (props.author === "Me") return "left";
         return "right";
@@ -43,7 +44,7 @@ export default function MessageBox(props) {
         {props.content}
       </Typography>
       <Typography variant="subtitle2" className={classes.timestamp}>
-        {new Date(props.timestamp).toLocaleTimeString().substr(0, 5)}
+        {new Date(props.timestamp).toTimeString().substr(0,5)}
       </Typography>
     </Paper>
   );

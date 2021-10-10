@@ -14,7 +14,7 @@ const initialState = [
     id: 2,
     author: "Me",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis" +
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
       +"tenetur unddasdae suscipit, quam beatae rerum inventore consectetur, neque doloribus," +
       "cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam",
     timestamp: Date.now() - 255,

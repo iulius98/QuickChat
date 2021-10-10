@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { messageAdded } from "../../reducers/messagesSlice";
 import { makeStyles } from "@mui/styles";
+import { userName } from "../../app/wsApi";
+
 
 const newMessageBoxStyles = makeStyles((theme) => {
   return {
@@ -26,7 +28,7 @@ const newMessageBoxStyles = makeStyles((theme) => {
   };
 });
 
-export default function NewMessageBox() {
+export default function NewMessageBox(props) {
   const classes = newMessageBoxStyles();
 
   const [content, setContent] = useState("");
@@ -34,9 +36,15 @@ export default function NewMessageBox() {
   const dispatch = useDispatch();
 
   const onContentChanged = (event) => setContent(event.target.value);
-  const onSumbit = (event) => {
+  const onSumbit = () => {
     if (content) {
-      dispatch(messageAdded({ id: nanoid(), author: "Me", content: content, timestamp: Date.now() }));
+      const msg = { id: nanoid(), author: "Me", content: content, timestamp: Date.now() }
+      dispatch(messageAdded(msg));
+      const msgExt = { id: nanoid(), author: userName, content: content, timestamp: Date.now() }
+      props.client.publish({
+        destination: '/chat',
+        body: JSON.stringify(msgExt),
+      });
     }
     setContent("");
   };

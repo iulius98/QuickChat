@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles/App.css";
 
 import store from "./app/store";
@@ -9,6 +9,8 @@ import ChatRoom from "./components/chat/ChatRoom";
 import MyAppBar from "./components/AppBar";
 import UsersList from "./components/chat/UsersList";
 
+import {client, baseUrl, userName} from "./app/wsApi";
+
 // App material themes
 const darkTheme = createTheme({
   palette: {
@@ -18,18 +20,11 @@ const darkTheme = createTheme({
 
 const lightTheme = createTheme({});
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDark: false,
-    };
-  }
-
-  render() {
-    // const { classes } = this.props;
+export default function App() {
+  const [isDark] = useState(false);
+  
     return (
-      <ThemeProvider theme={this.state.isDark ? { ...darkTheme } : { ...lightTheme }}>
+      <ThemeProvider theme={isDark ? { ...darkTheme } : { ...lightTheme }}>
         <Provider store={store}>
           <MyAppBar />
           <div className="AppContainer">
@@ -38,11 +33,10 @@ export default class App extends React.Component {
             </div>
 
             <div className="ChatRoom">
-              <ChatRoom />
+              <ChatRoom client={client} userName={userName}/>
             </div>
           </div>
         </Provider>
       </ThemeProvider>
     );
-  }
 }
