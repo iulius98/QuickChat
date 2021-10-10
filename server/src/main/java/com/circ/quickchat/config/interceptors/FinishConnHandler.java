@@ -14,7 +14,6 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.Alerts.UserAlert;
 
-@Component
 public class FinishConnHandler extends WebSocketHandlerDecorator {
 
 	public FinishConnHandler(WebSocketHandler delegate) {
