@@ -14,7 +14,7 @@
 # production
 /ui/build
 /*.jar
-/server/src/main/resources/static/.
+/server/src/main/resources/static/*
 
 # misc
 /ui/.DS_Store
