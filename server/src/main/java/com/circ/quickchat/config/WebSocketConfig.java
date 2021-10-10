@@ -24,14 +24,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/usertell");
+		registry.enableSimpleBroker("/user");
 	}
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		//endpoint for websocket connection
 		registry.addEndpoint("/ws-quick")
-				.addInterceptors(newConnInterceptor).withSockJS();
+				.addInterceptors(newConnInterceptor)
+				.setAllowedOriginPatterns("*")
+				.withSockJS();
 	}
 
 	@Override
