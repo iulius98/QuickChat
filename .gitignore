@@ -13,6 +13,7 @@
 
 # production
 /ui/build
+/*.jar
 
 # misc
 /ui/.DS_Store
