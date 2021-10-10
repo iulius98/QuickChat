@@ -1,8 +1,7 @@
 package com.circ.quickchat.config;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
@@ -21,17 +20,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Autowired
 	private NewConnInterceptor newConnInterceptor;
+	
+	@Autowired
+	private  AutowireCapableBeanFactory autowireCapableBeanFactory;
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/usertell");
+		registry.enableSimpleBroker("/user");
 	}
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		//endpoint for websocket connection
 		registry.addEndpoint("/ws-quick")
-				.addInterceptors(newConnInterceptor).withSockJS();
+				.addInterceptors(newConnInterceptor)
+				.setAllowedOriginPatterns("*")
+				.withSockJS();
 	}
 
 	@Override
@@ -40,7 +44,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 			@Override
 			public WebSocketHandler decorate(WebSocketHandler handler) {
-				return new FinishConnHandler(handler);
+				FinishConnHandler finishConnHandler = new FinishConnHandler(handler);
+				autowireCapableBeanFactory.autowireBean(finishConnHandler);
+				return finishConnHandler;
 			}
 		});
 	}

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Message {
 	
 	private String id;
-	private String content;
 	private String author;
+	private String content;
 	private Long timestamp;
 	
 	public String getId() {

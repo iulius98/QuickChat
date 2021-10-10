@@ -40,11 +40,13 @@ export default function NewMessageBox(props) {
     if (content) {
       const msg = { id: nanoid(), author: "Me", content: content, timestamp: Date.now() }
       dispatch(messageAdded(msg));
-      const msgExt = { id: nanoid(), author: userName, content: content, timestamp: Date.now() }
-      props.client.publish({
-        destination: '/chat',
-        body: JSON.stringify(msgExt),
-      });
+      
+      if (props.client) {
+        const msgExt = { id: nanoid(), author: props.sessionId, content: content, timestamp: Date.now() }
+        props.client.send('/chat', {}, JSON.stringify(msgExt));
+      }
+      else
+        console.log("Client not defined!");
     }
     setContent("");
   };

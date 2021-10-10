@@ -53,6 +53,7 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     messageAdded(state, action) {
+      console.log(action);
       state.push(action.payload);
     },
   },

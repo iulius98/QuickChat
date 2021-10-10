@@ -1,9 +1,6 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import { TextField, IconButton, Typography, Toolbar, AppBar} from "@mui/material";
 
 export default function MyAppBar(props) {
     return (
@@ -12,8 +9,9 @@ export default function MyAppBar(props) {
           <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
+          {/* <TextField id="outlined-basic" label="Username" variant="outlined" value={props.userName}/> */}
           <Typography variant="h6" color="inherit" component="div">
-            Photos
+            {props.userName}
           </Typography>
         </Toolbar>
       </AppBar>
