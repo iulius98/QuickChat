@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js"></script>
+    <script src="//cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+      <body>
+
+        <p>Going to connect to the WebSocket at /endpoint. Check Console</p>
+        <button onclick="ss()">Send</button>
+      </body>
+
+      <script type="text/javascript">
+                // var ws = new SockJS(`http://localhost:9000/ws-quick`);
+                // var client = Stomp.over(ws);
+                // var connectCallback = function() {
+                //     console.log("Connected");
+                // };
+                // var error_callback = function(error) {
+                //     console.log(error);
+                // };
+                // client.connect({}, connectCallback);
+      fetch('http://localhost:8080/user/create', {
+            method: 'POST', // or 'PUT'
+            mode: 'same-origin', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+            },
+             body: JSON.stringify({name: "TestName", timestamp: Date.now()})})
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                sessionId = data.id;
+                var ws = new SockJS(`http://localhost:8080/ws-quick?sessionId=${sessionId}`);
+                var client = Stomp.over(ws);
+                var connectCallback = function() {
+                     console.log("Connected");
+                };
+                var error_callback = function(error) {
+                    console.log(error);
+                };
+                client.connect({}, connectCallback);
+
+                // client = new StompJs.Client({
+                //     brokerURL: `ws://localhost:9000/ws-quick?sessionId=${sessionId}`,
+                //     debug: function (str) {
+                //     console.log(str);
+                //     },
+                //     reconnectDelay: 0,
+                //     // heartbeatIncoming: 4000,
+                //     // heartbeatOutgoing: 4000,
+                //     onConnect: (frame) => {
+                //         // Do something, all subscribes must be done is this callback
+                //         // This is needed because this will be executed after a (re)connect
+                //         console.log("This was in onConnect!");
+                //         subscription = client.subscribe(`/${sessionId}/usertell`, messageFilter);
+                //     },
+                //     onStompError: (frame) => {
+                //         // Will be invoked in case of error encountered at Broker
+                //         // Bad login/passcode typically will cause an error
+                //         // Complaint brokers will set `message` header with a brief message. Body may contain details.
+                //         // Compliant brokers will terminate the connection after any error
+                //         console.log('Broker reported error: ' + frame.headers['message']);
+                //         console.log('Additional details: ' + frame.body);
+                //     }
+                // });
+                // client.activate();
+                
+                /* var webSocket = new WebSocket(`ws://localhost:8080/ws-quick?sessionId=${sessionId}`);
+                webSocket.onopen = function(message) {
+                    console.log("JS: Server Connected... "+message);
+                };
+                webSocket.onmessage = function(message) {
+                    console.log("Getting a mess: "+message);
+                };
+                webSocket.onclose = function(message) {
+                    console.log("JS: Client disconnected... ");
+                    console.log(message);
+                };
+                webSocket.onerror = function(message) {
+                    console.log("Error occured");
+                    console.log(message);
+                }; */
+
+                function ss() {
+                    webSocket.send("test");
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+      </script>
+
+</html>
