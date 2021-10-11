@@ -1,10 +1,11 @@
 package com.circ.quickchat.controller;
 
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,5 +25,11 @@ public class UserController {
 		user.setId(UUID.randomUUID().toString());
 		sessionKeyToUser.put(user.getId(), user);
 		return user;
+	}
+	
+	@MessageMapping("/user/change/name")
+	public void processMessage(String newName,  SimpMessageHeaderAccessor  headerAccessor) {
+		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
+		sessionKeyToUser.get(sessionId).setName(newName);
 	}
 }

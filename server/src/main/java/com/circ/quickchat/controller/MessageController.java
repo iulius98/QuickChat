@@ -11,31 +11,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.circ.quickchat.entity.Message;
 import com.circ.quickchat.entity.User;
+import com.circ.quickchat.utils.communcation.UserUtilCommun;
 
 @RestController
 public class MessageController {
 	
-	@Autowired
-	private Map<String, User> sessionKeyToUser; 
+	/*
+	 * @Autowired private Map<String, User> sessionKeyToUser;
+	 */
 	
 	@Autowired
-	public SimpMessageSendingOperations send;
+	private UserUtilCommun userUtilCommun;
 
 	//endpoint for websocket client
 	@MessageMapping("/chat")
 	public void processMessage(Message message,  SimpMessageHeaderAccessor  headerAccessor) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
-		message.setId(UUID.randomUUID().toString());
-		sendToUsers(message);
+		userUtilCommun.sendToUsersWithExcept(sessionId, message);
 	}
 	
-	private void sendToUsers(Message message) {
-		String senderId = message.getAuthor();
-		message.setAuthor(sessionKeyToUser.get(senderId).getName());
-		sessionKeyToUser.keySet().stream().forEach(key -> {
-			if (!key.equals(senderId)) {
-				send.convertAndSendToUser(key, "/usertell", message);
-			}
-		});
-	}
 }
