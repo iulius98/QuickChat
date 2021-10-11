@@ -3,6 +3,7 @@ import "./styles/App.css";
 
 import store from "./app/store";
 import { messageAdded } from "./reducers/messagesSlice";
+import { usersUpdated } from "./reducers/usersSlice";
 import { Provider } from "react-redux";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -10,6 +11,7 @@ import ChatRoom from "./components/chat/ChatRoom";
 import MyAppBar from "./components/AppBar";
 import UsersList from "./components/chat/UsersList";
 
+import { MESSAGE, UPGRADE_LIST_USERS }  from "./app/constants";
 
 import SockJS from "sockjs-client/dist/sockjs";
 import Stomp from "stompjs";
@@ -40,9 +42,18 @@ export default function App() {
     if (message) {
       if (message.body) {
         console.log("Am primit: ");
-        console.log(message);
-        var msgPrimit = JSON.parse(message.body);
-        store.dispatch(messageAdded(msgPrimit));
+        const generalMessage = JSON.parse(message.body);
+        console.log(generalMessage);
+        switch (generalMessage.messageType) {
+          case MESSAGE:
+            store.dispatch(messageAdded(generalMessage.content));
+          break;
+          case UPGRADE_LIST_USERS:
+            console.log("UPGRADE:");
+            console.log(generalMessage.content);
+            store.dispatch(usersUpdated(generalMessage.content));
+          break;
+        }
       } else {
         console.log('Got empty message');
       }
@@ -81,7 +92,7 @@ export default function App() {
     <ThemeProvider theme={isDark ? { ...darkTheme } : { ...lightTheme }}>
       { isConnected ? (
           <Provider store={store}>
-            <MyAppBar />
+            <MyAppBar client={client}/>
             <div className="AppContainer">
               <div className="Groups">
                 <UsersList />

@@ -2,6 +2,7 @@ package com.circ.quickchat.utils.Alerts;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,9 @@ public class UserAlert {
 	}
 	
 	private void changeStatusUserList(boolean isCome, User changedUser) {
-		List<String> newUserList = sessionKeyToUser.values().stream()
-				.map(user -> user.getName()).collect(Collectors.toList());
+		List<User> newUserList = sessionKeyToUser.values().stream()
+				.map(user -> User.builder().name(user.getName()).id(UUID.randomUUID().toString()).build())
+				.collect(Collectors.toList());
 		UpgradeListUsersMessage message = UpgradeListUsersMessage.builder()
 				.content(newUserList).changedUser(changedUser.getName())
 				.isCome(isCome).messageType(MessageType.UPGRADE_LIST_USERS).build();

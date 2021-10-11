@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class UpgradeListUsersMessage extends GeneralMessage<List<String>> {
+public class UpgradeListUsersMessage extends GeneralMessage<List<User>> {
 	
 	private boolean isCome;
 	private String changedUser;

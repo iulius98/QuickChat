@@ -28,7 +28,7 @@ public class UserController {
 	}
 	
 	@MessageMapping("/user/change/name")
-	public void processMessage(String newName,  SimpMessageHeaderAccessor  headerAccessor) {
+	public void processChageUserName(String newName,  SimpMessageHeaderAccessor  headerAccessor) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
 		sessionKeyToUser.get(sessionId).setName(newName);
 	}

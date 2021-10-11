@@ -23,12 +23,6 @@ const messagesListStyles = makeStyles((theme) => {
   };
 });
 
-// const AlwaysScrollToBottom = () => {
-//   const elementRef = useRef();
-//   useEffect(() => elementRef.current.scrollTo(0, -500));
-//   return <div ref={elementRef} />;
-// };
-
 export default function MessagesList() {
   const messages = useSelector((state) => state.messages);
   const classes = messagesListStyles();
