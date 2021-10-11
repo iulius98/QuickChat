@@ -48,6 +48,7 @@
 # IDES
 
 ### IntelliJ IDEA ###
+.idea
 /server/.idea
 *.iws
 *.iml
