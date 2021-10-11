@@ -34,7 +34,7 @@ public class MessageController {
 		message.setAuthor(sessionKeyToUser.get(senderId).getName());
 		sessionKeyToUser.keySet().stream().forEach(key -> {
 			if (!key.equals(senderId)) {
-				send.convertAndSendToUser(senderId, "/usertell", message);
+				send.convertAndSendToUser(key, "/usertell", message);
 			}
 		});
 	}

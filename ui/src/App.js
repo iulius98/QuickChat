@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./styles/App.css";
 
 import store from "./app/store";
-import messageAdded from "./reducers/messagesSlice";
+import { messageAdded } from "./reducers/messagesSlice";
 import { Provider } from "react-redux";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -47,11 +47,11 @@ export default function App() {
       if (message.body) {
         console.log("Am primit: ");
         console.log(message);
-        const msg = { id: nanoid(), author: "Me", content: "This is a test", timestamp: Date.now() };
+        //const msg = { id: nanoid(), author: "Me", content: "This is a test", timestamp: Date.now() };
         var msgPrimit = JSON.parse(message.body);
-        console.log(msgPrimit);
+       /* console.log(msgPrimit);
         msgPrimit.id = nanoid();
-        console.log(msg);
+        console.log(msg);*/
         store.dispatch(messageAdded(msgPrimit));
       } else {
         console.log('Got empty message');
