@@ -15,12 +15,16 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.Alerts.UserAlert;
+import com.circ.quickchat.utils.communcation.UserUtilCommun;
 
 @Component
 public class NewConnInterceptor implements HandshakeInterceptor{
 	
 	@Autowired
 	private Map<String, User> sessionKeyToUser;
+	
+	@Autowired
+	private UserAlert userAlert;
 	
 
 	@Override
@@ -41,7 +45,10 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-		int x = 1;
+		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
+		String sessionId = queryParams.get("sessionId")[0];
+		User newUser = sessionKeyToUser.get(sessionId);
+		userAlert.connectNewUser(newUser);
 	}
 
 }

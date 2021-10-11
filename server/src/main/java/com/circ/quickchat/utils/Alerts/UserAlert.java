@@ -1,14 +1,41 @@
 package com.circ.quickchat.utils.Alerts;
 
-import com.circ.quickchat.entity.User;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.circ.quickchat.entity.UpgradeListUsersMessage;
+import com.circ.quickchat.entity.User;
+import com.circ.quickchat.utils.communcation.UserUtilCommun;
+
+import constant.MessageType;
+
+@Component
 public class UserAlert {
 	
-	public static void userDisconect(User user) {
-		
+	@Autowired
+	private Map<String, User> sessionKeyToUser;
+	
+	@Autowired
+	private UserUtilCommun userUtilCommun;
+	
+	public void connectNewUser(User newUser) {
+		changeStatusUserList(true, newUser);
 	}
 	
-	public static void userConnect(String user) {
-		
+	public void disconect(User user) {
+		changeStatusUserList(false, user);
+	}
+	
+	private void changeStatusUserList(boolean isCome, User changedUser) {
+		List<String> newUserList = sessionKeyToUser.values().stream()
+				.map(user -> user.getName()).collect(Collectors.toList());
+		UpgradeListUsersMessage message = UpgradeListUsersMessage.builder()
+				.content(newUserList).changedUser(changedUser.getName())
+				.isCome(isCome).messageType(MessageType.UPGRADE_LIST_USERS).build();
+		userUtilCommun.sendToAllUsers(message);
 	}
 }
