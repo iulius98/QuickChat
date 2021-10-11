@@ -49,6 +49,7 @@
 
 ### IntelliJ IDEA ###
 .idea
+./settings
 /server/.idea
 *.iws
 *.iml

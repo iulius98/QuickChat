@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [
- /* {
+  {
     id: 1,
     author: "User",
     content:
@@ -45,7 +45,7 @@ const initialState = [
       +"tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus," +
       "cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam",
     timestamp: Date.now(),
-  },*/
+  }
 ];
 
 const messagesSlice = createSlice({
@@ -53,7 +53,6 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     messageAdded(state, action) {
-      console.log("AICI ACTION", action);
       state.push(action.payload);
     },
   },

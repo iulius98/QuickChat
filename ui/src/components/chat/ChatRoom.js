@@ -3,8 +3,6 @@ import MessagesList from "./MessagesList";
 import NewMessageBox from "./NewMessageBox";
 import "../../styles/ChatRoom.css";
 
-import { useDispatch } from "react-redux";
-import { messageAdded } from "../../reducers/messagesSlice";
 
 export default function ChatRoom(props) {
   // const dispatch = useDispatch();
@@ -17,8 +15,6 @@ export default function ChatRoom(props) {
   //   }
   // };
 
-  if (props.client) console.log("ChatRoom client is here");
-  else console.log("ChatRomm client is not here");
 
   return (
     <div className="ChatRoomContainer">
@@ -26,7 +22,7 @@ export default function ChatRoom(props) {
         <MessagesList />
       </div>
       <div className="NewMessageBox">
-        <NewMessageBox client={props.client} userName={props.userName} sessionId={props.sessionId}/>
+        <NewMessageBox client={props.client} sessionId={props.sessionId}/>
       </div>
     </div>
   );

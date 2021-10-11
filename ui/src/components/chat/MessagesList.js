@@ -1,40 +1,72 @@
-import React from "react";
+import React,  { useRef, useEffect, useCallback } from 'react';
 import { makeStyles } from "@mui/styles";
 import MessageBox from "./MessageBox";
 import { useSelector } from "react-redux";
-import { useGetMessagesQuery } from "../../app/websocketAPI";
-import { Typography } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 const messagesListStyles = makeStyles((theme) => {
   return {
     messagesList: {
       maxHeight: "100%",
       backgroundColor: "#66ff66",
-      overflowY: "scroll",
+      overflowY: "auto",
     },
+    paper: {
+      width: "50%",
+      margin: "2%",
+      visibility: "hidden",
+      float: (props) => {
+        if (props.author === "Me") return "left";
+        return "right";
+      },
+    }
   };
 });
 
+// const AlwaysScrollToBottom = () => {
+//   const elementRef = useRef();
+//   useEffect(() => elementRef.current.scrollTo(0, -500));
+//   return <div ref={elementRef} />;
+// };
+
 export default function MessagesList() {
-  // const { data, error, isError, isLoading } = useGetMessagesQuery("test");
   const messages = useSelector((state) => state.messages);
   const classes = messagesListStyles();
 
+  const getScroll = () => {
+    if (window.pageYOffset !== undefined) {
+        console.log(" Y-axis : " + window.pageYOffset); 
+        return window.pageYOffset;
+    } else {
+        var y_axis, doc = document,
+            ele = doc.documentElement,
+            b = doc.body;
+        y_axis = ele.scrollTop || b.scrollTop || 0;
+        console.log(" Y-axis : " + y_axis);
+        return y_axis;
+    }
+}
+
+  useEffect(() => {
+    getScroll() 
+    document.getElementById("last").scrollIntoView(true);
+    getScroll(); 
+  }, [messages]);
+
+  // window.onload = (e) => document.getElementById("last").scrollIntoView(true);
+
   return (
-    <div className={classes.messagesList}>
-      {/* {isError ? (
-        <>There is an error: {error.messages}</>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? ( */}
-        <ul>
-          {messages.map((msg) => (
-           <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />
-          ))}
+    <div id="list" className={classes.messagesList}>
+      <ul>
+        {
+          messages.map((msg, index) => 
+            <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />) 
+        }
+        <Paper className={classes.paper} color="primary">
+                        <div id="last">STAT</div>
+        </Paper>;
         </ul>
-     {/* ) : null} */}
     </div>
   );
 }
 
-{/* <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} /> */}
