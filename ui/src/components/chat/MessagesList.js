@@ -1,4 +1,4 @@
-import React,  { useRef, useEffect, useCallback } from 'react';
+import React,  { useEffect } from 'react';
 import { makeStyles } from "@mui/styles";
 import MessageBox from "./MessageBox";
 import { useSelector } from "react-redux";
@@ -8,7 +8,7 @@ const messagesListStyles = makeStyles((theme) => {
   return {
     messagesList: {
       maxHeight: "100%",
-      backgroundColor: "#66ff66",
+      //backgroundColor: "#66ff66",
       overflowY: "auto",
     },
     paper: {
@@ -57,8 +57,8 @@ export default function MessagesList() {
             <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />) 
         }
         <Paper className={classes.paper} color="primary">
-                        <div id="last">STAT</div>
-        </Paper>;
+                        <div id="last" />
+        </Paper>
         </ul>
     </div>
   );

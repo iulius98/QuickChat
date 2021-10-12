@@ -30,7 +30,7 @@ export default function MyAppBar(props) {
 
   const changedUserName = (event) => {
     dispatch(userNameChanged(event.target.value));
-    props.client.send('/user/change/name', {}, userName);
+    props.client.send('/user/change/name', {}, event.target.value);
   }
 
   return (
