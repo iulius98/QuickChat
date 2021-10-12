@@ -3,6 +3,10 @@
 # dev
 .vscode
 
+# useless
+/ui/src/app/wsApi.js
+/ui/src/app/websocketAPI.js
+
 # dependencies
 /ui/node_modules
 /ui/.pnp
