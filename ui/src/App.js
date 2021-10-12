@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ChatRoom from "./components/chat/ChatRoom";
 import MyAppBar from "./components/AppBar";
 import UsersList from "./components/chat/UsersList";
+import serverHost from "./properties.js"
 
 import { MESSAGE, UPGRADE_LIST_USERS }  from "./app/constants";
 
@@ -26,8 +27,6 @@ const darkTheme = createTheme({
 });
 
 const lightTheme = createTheme({});
-
-const baseUrl = "http://localhost:8080";
 
 var sessionId;
 var client;
@@ -62,13 +61,13 @@ export default function App() {
   
   useEffect(() => {
     console.log(store.getState().userName);
-    axios.post(baseUrl + '/user/create', {
+    axios.post(serverHost + '/user/create', {
               name: store.getState().userName,
               timestamp: Date.now(),
     }).then(function (response) {
       sessionId = response.data.id;
 
-      var ws = new SockJS(`http://localhost:8080/ws-quick?sessionId=${sessionId}`);
+      var ws = new SockJS(`${serverHost}/ws-quick?sessionId=${sessionId}`);
       client = Stomp.over(ws);
 
       const connectCallback = function() {
