@@ -1,0 +1,2 @@
+export const MESSAGE = "MESSAGE";
+export const UPGRADE_LIST_USERS = "UPGRADE_LIST_USERS";
