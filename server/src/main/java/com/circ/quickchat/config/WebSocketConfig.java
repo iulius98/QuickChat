@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
-import com.circ.quickchat.config.interceptors.FinishConnHandler;
+import com.circ.quickchat.config.interceptors.ConnHandler;
 import com.circ.quickchat.config.interceptors.NewConnInterceptor;
 
 @Configuration
@@ -44,7 +44,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 			@Override
 			public WebSocketHandler decorate(WebSocketHandler handler) {
-				FinishConnHandler finishConnHandler = new FinishConnHandler(handler);
+				ConnHandler finishConnHandler = new ConnHandler(handler);
 				autowireCapableBeanFactory.autowireBean(finishConnHandler);
 				return finishConnHandler;
 			}

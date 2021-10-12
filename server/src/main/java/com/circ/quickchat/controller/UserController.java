@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.circ.quickchat.entity.User;
+import com.circ.quickchat.utils.Alerts.UserAlert;
 
 @RestController
 public class UserController {
 	
 	@Autowired
 	Map<String, User> sessionKeyToUser;
+	
+	@Autowired
+	UserAlert userAlert;
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/user/create")
@@ -31,5 +35,6 @@ public class UserController {
 	public void processChageUserName(String newName,  SimpMessageHeaderAccessor  headerAccessor) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
 		sessionKeyToUser.get(sessionId).setName(newName);
+		userAlert.updateUser(sessionKeyToUser.get(sessionId));
 	}
 }

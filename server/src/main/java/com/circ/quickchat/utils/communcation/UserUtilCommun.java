@@ -32,5 +32,9 @@ public class UserUtilCommun {
 			send.convertAndSendToUser(key, "/usertell", message);
 		});
 	}
+	
+	public void sendToUser(String sessionId, Object message) {
+			send.convertAndSendToUser(sessionId, "/usertell", message);
+	}
 
 }

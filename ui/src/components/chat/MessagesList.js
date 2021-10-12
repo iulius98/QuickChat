@@ -50,7 +50,7 @@ export default function MessagesList() {
   // window.onload = (e) => document.getElementById("last").scrollIntoView(true);
 
   return (
-    <div id="list" className={classes.messagesList}>
+    <div className={classes.messagesList}>
       <ul>
         {
           messages.map((msg, index) => 

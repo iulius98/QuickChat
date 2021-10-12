@@ -1,6 +1,7 @@
 package com.circ.quickchat.config.interceptors;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpUtils;
@@ -47,6 +48,7 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 			Exception exception) {
 		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
 		String sessionId = queryParams.get("sessionId")[0];
+		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
 		User newUser = sessionKeyToUser.get(sessionId);
 		userAlert.connectNewUser(newUser);
 	}

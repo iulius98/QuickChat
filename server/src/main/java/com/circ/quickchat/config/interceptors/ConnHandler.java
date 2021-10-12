@@ -11,9 +11,9 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.Alerts.UserAlert;
 
-public class FinishConnHandler extends WebSocketHandlerDecorator {
+public class ConnHandler extends WebSocketHandlerDecorator {
 
-	public FinishConnHandler(WebSocketHandler delegate) {
+	public ConnHandler(WebSocketHandler delegate) {
 		super(delegate);
 	}
 
@@ -30,5 +30,29 @@ public class FinishConnHandler extends WebSocketHandlerDecorator {
 		sessionKeyToUser.remove(sessionId);
 		userAlert.disconect(user);
 	}
+
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		super.afterConnectionEstablished(session);
+		String sessionId = (String) session.getAttributes().get("sessionId");
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				userAlert.sendUserListTo(sessionId);
+			}
+		}).start();
+		userAlert.sendUserListTo(sessionId);
+
+	}
+	
+	
 
 }
