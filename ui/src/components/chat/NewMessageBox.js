@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { messageAdded } from "../../reducers/messagesSlice";
 import { makeStyles } from "@mui/styles";
+import { useSelector } from "react-redux";
 
 const newMessageBoxStyles = makeStyles((theme) => {
   return {
@@ -28,6 +29,7 @@ const newMessageBoxStyles = makeStyles((theme) => {
 
 export default function NewMessageBox(props) {
   const classes = newMessageBoxStyles();
+  const userName = useSelector((state) => state.userName);
 
   const [content, setContent] = useState("");
 
@@ -41,7 +43,7 @@ export default function NewMessageBox(props) {
       dispatch(messageAdded(msg));
       
       if (props.client) {
-        const msgExt = { id: nanoid(), author: props.sessionId, content: content, timestamp: Date.now() }
+        const msgExt = { id: nanoid(), author: userName, content: content, timestamp: Date.now() }
         props.client.send('/chat', {}, JSON.stringify(msgExt));
       }
       else

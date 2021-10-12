@@ -46,7 +46,7 @@ export default function App() {
         console.log(generalMessage);
         switch (generalMessage.messageType) {
           case MESSAGE:
-            store.dispatch(messageAdded(generalMessage.content));
+            store.dispatch(messageAdded(generalMessage));
           break;
           case UPGRADE_LIST_USERS:
             console.log("UPGRADE:");
