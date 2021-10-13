@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.circ.quickchat.entity.ActionUserMessage;
 import com.circ.quickchat.entity.UserListMessage;
+import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
 
@@ -23,6 +24,9 @@ public class UserAlert {
 	
 	@Autowired
 	private UserUtilCommun userUtilCommun;
+	
+	@Autowired
+	private UserService userService;
 	
 	public void connectNewUser(User user) {
 		actionOnUser(user, MessageType.ADD_USER);

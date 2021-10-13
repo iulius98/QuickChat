@@ -14,7 +14,12 @@ import lombok.experimental.SuperBuilder;
 public class User {
 	
 	private String id;
+	
+	@JsonIgnoreProperties
+	private String sessionId;
+	
 	private String name;
+	
 	private long timestamp;
 	
 	@JsonIgnoreProperties

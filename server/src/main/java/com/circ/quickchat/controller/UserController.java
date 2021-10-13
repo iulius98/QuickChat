@@ -27,7 +27,8 @@ public class UserController {
 	@PostMapping("/user/create")
 	public User createTemporaryUser(@RequestBody User user) {
 		user.setId(UUID.randomUUID().toString());
-		sessionKeyToUser.put(user.getId(), user);
+		user.setSessionId(UUID.randomUUID().toString());
+		sessionKeyToUser.put(user.getSessionId(), user);
 		return user;
 	}
 	

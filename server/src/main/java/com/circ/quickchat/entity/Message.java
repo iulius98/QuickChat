@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 public class Message extends GeneralMessage<String> {
 	
 	private String id;
+	private String chatId;
 	private String author;
 	private Long timestamp;
 	
