@@ -17,6 +17,9 @@
 
 # production
 /ui/build
+/ui/target
+/ui/node
+/server/target
 /*.jar
 /server/src/main/resources/static/*
 
