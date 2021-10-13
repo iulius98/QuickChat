@@ -49,7 +49,6 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 				userAlert.sendUserListTo(sessionId);
 			}
 		}).start();
-		userAlert.sendUserListTo(sessionId);
 
 	}
 	

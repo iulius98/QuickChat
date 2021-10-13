@@ -39,7 +39,6 @@ public class UserAlert {
 	
 	public void sendUserListTo(String sessionId) {
 		List<User> userList = sessionKeyToUser.values().stream()
-				.map(user -> User.builder().name(user.getName()).id(UUID.randomUUID().toString()).build())
 				.collect(Collectors.toList());
 		UserListMessage message = UserListMessage.builder()
 				.content(userList)

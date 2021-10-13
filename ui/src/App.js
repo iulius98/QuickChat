@@ -3,16 +3,15 @@ import "./styles/App.css";
 
 import store from "./app/store";
 import { messageAdded } from "./reducers/messagesSlice";
-import { usersUpdated } from "./reducers/usersSlice";
+import { usersListUpdated, userAdded, userDeleted, userUpdated } from "./reducers/usersSlice";
 import { Provider } from "react-redux";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ChatRoom from "./components/chat/ChatRoom";
 import MyAppBar from "./components/AppBar";
 import UsersList from "./components/chat/UsersList";
-import serverHost from "./properties.js"
 
-import { MESSAGE, UPGRADE_LIST_USERS }  from "./app/constants";
+import * as constants from "./app/constants";
 
 import SockJS from "sockjs-client/dist/sockjs";
 import Stomp from "stompjs";
@@ -44,13 +43,28 @@ export default function App() {
         const generalMessage = JSON.parse(message.body);
         console.log(generalMessage);
         switch (generalMessage.messageType) {
-          case MESSAGE:
+          case constants.MESSAGE:
             store.dispatch(messageAdded(generalMessage));
           break;
-          case UPGRADE_LIST_USERS:
-            console.log("UPGRADE:");
-            console.log(generalMessage.content);
-            store.dispatch(usersUpdated(generalMessage.content));
+
+          case constants.UPGRADE_LIST_USERS:
+            store.dispatch(usersListUpdated(generalMessage.content));
+          break;
+
+          case constants.ADD_USER:
+            store.dispatch(userAdded(generalMessage.content));
+          break;
+
+          case constants.DELETE_USER:
+            store.dispatch(userDeleted(generalMessage.content));
+          break;
+          
+          case constants.UPDATE_USER:
+            store.dispatch(userUpdated(generalMessage.content));
+          break;
+
+          default:
+            console.log("MESSAGE TYPE NOT AN OPTION!");
           break;
         }
       } else {
@@ -61,13 +75,13 @@ export default function App() {
   
   useEffect(() => {
     console.log(store.getState().userName);
-    axios.post(serverHost + '/user/create', {
+    axios.post(constants.serverHost + '/user/create', {
               name: store.getState().userName,
               timestamp: Date.now(),
     }).then(function (response) {
       sessionId = response.data.id;
 
-      var ws = new SockJS(`${serverHost}/ws-quick?sessionId=${sessionId}`);
+      var ws = new SockJS(`${constants.serverHost}/ws-quick?sessionId=${sessionId}`);
       client = Stomp.over(ws);
 
       const connectCallback = function() {
