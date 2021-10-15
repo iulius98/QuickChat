@@ -1,24 +1,24 @@
 import React,  { useEffect } from 'react';
-import { makeStyles } from "@mui/styles";
 import MessageBox from "./MessageBox";
+
 import { useSelector } from "react-redux";
+
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import { makeStyles } from "@mui/styles";
 
 const messagesListStyles = makeStyles((theme) => {
   return {
     messagesList: {
       maxHeight: "100%",
-      //backgroundColor: "#66ff66",
       overflowY: "auto",
     },
-    paper: {
-      width: "50%",
-      margin: "2%",
+    box: {
+      width: "100%", 
+      display: "inline-block", 
       visibility: "hidden",
-      float: (props) => {
-        if (props.author === "Me") return "left";
-        return "right";
-      },
+       height: 0, 
+       float: "left"
     }
   };
 });
@@ -47,19 +47,15 @@ export default function MessagesList() {
     getScroll(); 
   }, [messages]);
 
-  // window.onload = (e) => document.getElementById("last").scrollIntoView(true);
-
   return (
     <div className={classes.messagesList}>
-      <ul>
         {
           messages.map((msg, index) => 
             <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />) 
         }
-        <Paper className={classes.paper} color="primary">
-                        <div id="last" />
-        </Paper>
-        </ul>
+        <Box className={classes.box}>
+            <div id="last" />
+        </Box>
     </div>
   );
 }

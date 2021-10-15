@@ -1,8 +1,8 @@
 .AppContainer {
-  background-color: darkred;
   position: relative;
-  top: 48px;
-  height: calc(100% - 48px);
+  top: 67px;
+  height: calc(100% - 67px);
+  max-height: 91%;
   width: 100vw;
   display: grid;
   grid-auto-columns: 1fr;
@@ -14,11 +14,18 @@
 
 .Groups {
   grid-area: Groups;
-  background-color: forestgreen;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  border-color: greenyellow;
+  border-style: solid;
+  border-width: 5px;
 }
 
 .ChatRoom {
   grid-area: ChatRoom;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
 }

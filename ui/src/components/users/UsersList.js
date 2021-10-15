@@ -10,7 +10,7 @@ export default function UsersList() {
   console.log(users);
 
   const renderUsers = users.map((user) => (
-    <Paper key={user.id}>
+    <Paper key={user.id} sx={{ width: "100%", maxWidth: "95%", wordWrap: "break-word", overflow: "auto" }}>
       <Typography variant="h5"> {user.name} </Typography>
     </Paper>
   ));

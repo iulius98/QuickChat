@@ -1,25 +1,34 @@
 import * as React from "react";
 
 import { makeStyles } from "@mui/styles";
-import { TextField, Typography, Toolbar, AppBar} from "@mui/material";
+import { TextField, Typography, Toolbar, AppBar, IconButton } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import Brightness3Icon from '@mui/icons-material/Brightness3';
+import Brightness2Icon from '@mui/icons-material/Brightness2';
+import Brightness5Icon from '@mui/icons-material/Brightness5';
 
 import { userNameChanged } from "../reducers/userNameSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 
-const appBarStyles = makeStyles((theme) => {
-  return {
+const appBarStyles = makeStyles((theme) => ({
+    appBar: {
+      backgroundColor: theme.palette.primary.dark,
+    },
     userNameLabel: {
       margin: "15px", 
+      display: "inline-block",
     },
     userNameField: {
       position: "relative",
+      color: "white",
       top: "2px",
       left: "7px",
+      display: "inline-block",
     }
-  };
-});
+  })
+);
 
 export default function MyAppBar(props) {
   const classes = appBarStyles();
@@ -34,13 +43,24 @@ export default function MyAppBar(props) {
   }
 
   return (
-    <AppBar position="fixed" className={props.className}>
-      <Toolbar variant="dense">
-        <Typography variant="h6"  className={classes.userNameLabel}>
-          Your name: 
-        </Typography>
-        <TextField id="userName" color="secondary" className={classes.userNameField} 
-        variant="standard" value={userName} onChange={changedUserName}/> 
+    <AppBar position="fixed">
+      <Toolbar className={classes.appBar}>
+        <Grid container> 
+          <Grid item xs={3}>
+            <Typography variant="h6"  className={classes.userNameLabel}> Your name: </Typography>
+            <TextField id="userName" className={classes.userNameField}  
+            variant="standard" value={userName} onChange={changedUserName}/> 
+          </Grid>
+
+          <Grid item xs={8}>
+          </Grid>
+
+          <Grid item xs={1}>
+            <IconButton color="secondary" aria-label="dark-light-mode">
+              <Brightness2Icon />
+            </IconButton>
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );
