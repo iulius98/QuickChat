@@ -14,12 +14,28 @@
 
 .MessagesList {
   grid-area: MessagesList;
+  width: auto;
+  height: auto;
+  margin: 0;
+  max-width: 100%;
+  padding: 1%;
   min-height: 0;
+  border-color: yellow;
+  display: inline-block;
+  border-style: solid;
+  border-width: 5px;
+  overflow-x: hidden;
 }
 
 .NewMessageBox {
   grid-area: NewMessageBox;
-  background-color: gold;
+  /* width: 100%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 0;
   top: 0;
+  border-color: royalblue;
+  border-style: solid;
+  border-width: 5px;
 }

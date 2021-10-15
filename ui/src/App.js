@@ -7,9 +7,9 @@ import { usersListUpdated, userAdded, userDeleted, userUpdated } from "./reducer
 import { Provider } from "react-redux";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ChatRoom from "./components/chat/ChatRoom";
+import ChatRoom from "./components/chat-room/ChatRoom";
 import MyAppBar from "./components/AppBar";
-import UsersList from "./components/chat/UsersList";
+import UsersList from "./components/users/UsersList";
 
 import * as constants from "./app/constants";
 
@@ -19,59 +19,65 @@ import axios from "axios";
 
 
 // App material themes
-const darkTheme = createTheme({
+const lightTheme = createTheme({
   palette: {
-    type: "dark",
+    primary: {
+      main: '#283593',
+    },
+    secondary: {
+      main: '#0097a7',
+    },
   },
 });
 
-const lightTheme = createTheme({});
+const darkTheme = createTheme(lightTheme, {
+  mode: "dark",
+});
 
 var sessionId;
 var client;
 
+const messageFilter = (message) => {
+  // called when the client receives a STOMP message from the server
+  if (message) {
+    if (message.body) {
+      console.log("Am primit: ");
+      const generalMessage = JSON.parse(message.body);
+      console.log(generalMessage);
+      switch (generalMessage.messageType) {
+        case constants.MESSAGE:
+          store.dispatch(messageAdded(generalMessage));
+        break;
+
+        case constants.UPGRADE_LIST_USERS:
+          store.dispatch(usersListUpdated(generalMessage.content));
+        break;
+
+        case constants.ADD_USER:
+          store.dispatch(userAdded(generalMessage.content));
+        break;
+
+        case constants.DELETE_USER:
+          store.dispatch(userDeleted(generalMessage.content));
+        break;
+        
+        case constants.UPDATE_USER:
+          store.dispatch(userUpdated(generalMessage.content));
+        break;
+
+        default:
+          console.log("MESSAGE TYPE NOT RECOGNIZED!");
+        break;
+      }
+    } else {
+      console.log('Got empty message');
+    }
+  }
+};
 
 export default function App() {
   const [isDark] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-
-  const messageFilter = (message) => {
-    // called when the client receives a STOMP message from the server
-    if (message) {
-      if (message.body) {
-        console.log("Am primit: ");
-        const generalMessage = JSON.parse(message.body);
-        console.log(generalMessage);
-        switch (generalMessage.messageType) {
-          case constants.MESSAGE:
-            store.dispatch(messageAdded(generalMessage));
-          break;
-
-          case constants.UPGRADE_LIST_USERS:
-            store.dispatch(usersListUpdated(generalMessage.content));
-          break;
-
-          case constants.ADD_USER:
-            store.dispatch(userAdded(generalMessage.content));
-          break;
-
-          case constants.DELETE_USER:
-            store.dispatch(userDeleted(generalMessage.content));
-          break;
-          
-          case constants.UPDATE_USER:
-            store.dispatch(userUpdated(generalMessage.content));
-          break;
-
-          default:
-            console.log("MESSAGE TYPE NOT AN OPTION!");
-          break;
-        }
-      } else {
-        console.log('Got empty message');
-      }
-    }
-  };
   
   useEffect(() => {
     console.log(store.getState().userName);
