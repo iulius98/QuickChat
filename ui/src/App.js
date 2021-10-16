@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, createContext } from "react";
 import "./styles/App.css";
 
 import store from "./app/store";
@@ -6,6 +6,7 @@ import { messageAdded } from "./reducers/messagesSlice";
 import { usersListUpdated, userAdded, userDeleted, userUpdated } from "./reducers/usersSlice";
 import { Provider } from "react-redux";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import darkScrollbar from '@mui/material/darkScrollbar';
 
@@ -21,26 +22,28 @@ import axios from "axios";
 
 
 // App material themes
-const lightTheme = createTheme({
-  palette: {
-    secondary: {
-      main: '#e65100',
-    },
-  },
-});
+// const lightTheme = createTheme({
+//   palette: {
+//     secondary: {
+//       main: '#e65100',
+//     },
+//   },
+// });
 
-const darkTheme = createTheme(lightTheme, {
-  palette: {
-    mode: "dark",
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: darkScrollbar(),
-      },
-    },
-  },
-});
+// const darkTheme = createTheme(lightTheme, {
+//   palette: {
+//     mode: "dark",
+//   },
+//   components: {
+//     MuiCssBaseline: {
+//       styleOverrides: {
+//         body: darkScrollbar(),
+//       },
+//     },
+//   },
+// });
+
+// const LightinhModeContext = createContext({ toggleLightingMode: () => {} });
 
 var sessionId;
 var client;
@@ -84,8 +87,22 @@ const messageFilter = (message) => {
 };
 
 export default function App() {
-  const [isDark, setIsDark] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+
+  const [mode, setMode] = useState(useMediaQuery('(prefers-color-scheme: dark)') ? 'light' : 'dark');
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: mode,
+          secondary: {
+            main: '#e65100',
+          },
+        },
+      }),
+    [mode],
+  );
   
   useEffect(() => {
     console.log(store.getState().userName);
@@ -115,17 +132,14 @@ export default function App() {
 
   }, []);
 
-  const changeLighting = () => {
-    setIsDark(isDark ? false : true);
-    setTimeout(() => console.log(isDark), 1000);
-  }
+  const lightingMode = () => { setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light')); console.log(mode); }
   
   return (    
-    <ThemeProvider theme={isDark ? { ...darkTheme } : { ...lightTheme }}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       { isConnected ? (
           <Provider store={store}>
-            <MyAppBar client={client} changeLighting={changeLighting} isDark={isDark}/>
+            <MyAppBar client={client} lightingMode={lightingMode}/>
             <div className="AppContainer">
               <div className="Groups">
                 <UsersList />
@@ -135,8 +149,11 @@ export default function App() {
                 <ChatRoom client={client} sessionId={sessionId}/>
               </div>
             </div>
-          </Provider>) : (
-            <h1>Se incarca clientul</h1>
+          </Provider>
+          ) : (
+            <div style={{display: "flex", top: "50%", justifyContent: "center", alignItems: "center"}}>
+                <h1>Client is loading</h1>  
+            </div>
           )
       }
     </ThemeProvider>
