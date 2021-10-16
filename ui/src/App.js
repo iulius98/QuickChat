@@ -11,7 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import darkScrollbar from '@mui/material/darkScrollbar';
 
 import ChatRoom from "./components/chat-room/ChatRoom";
-import MyAppBar from "./components/AppBar";
+import MyAppBar from "./components/appBar/AppBar";
 import UsersList from "./components/users/UsersList";
 
 import * as constants from "./app/constants";
@@ -19,31 +19,6 @@ import * as constants from "./app/constants";
 import SockJS from "sockjs-client/dist/sockjs";
 import Stomp from "stompjs";
 import axios from "axios";
-
-
-// App material themes
-// const lightTheme = createTheme({
-//   palette: {
-//     secondary: {
-//       main: '#e65100',
-//     },
-//   },
-// });
-
-// const darkTheme = createTheme(lightTheme, {
-//   palette: {
-//     mode: "dark",
-//   },
-//   components: {
-//     MuiCssBaseline: {
-//       styleOverrides: {
-//         body: darkScrollbar(),
-//       },
-//     },
-//   },
-// });
-
-// const LightinhModeContext = createContext({ toggleLightingMode: () => {} });
 
 var sessionId;
 var client;
@@ -98,6 +73,13 @@ export default function App() {
           mode: mode,
           secondary: {
             main: '#e65100',
+          },
+        },
+        components: {
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: mode === 'dark' ? darkScrollbar() : null,
+            },
           },
         },
       }),
