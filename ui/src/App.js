@@ -5,8 +5,10 @@ import store from "./app/store";
 import { messageAdded } from "./reducers/messagesSlice";
 import { usersListUpdated, userAdded, userDeleted, userUpdated } from "./reducers/usersSlice";
 import { Provider } from "react-redux";
-
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from '@mui/material/CssBaseline';
+import darkScrollbar from '@mui/material/darkScrollbar';
+
 import ChatRoom from "./components/chat-room/ChatRoom";
 import MyAppBar from "./components/AppBar";
 import UsersList from "./components/users/UsersList";
@@ -21,17 +23,23 @@ import axios from "axios";
 // App material themes
 const lightTheme = createTheme({
   palette: {
-    primary: {
-      main: '#283593',
-    },
     secondary: {
-      main: '#0097a7',
+      main: '#e65100',
     },
   },
 });
 
 const darkTheme = createTheme(lightTheme, {
-  mode: "dark",
+  palette: {
+    mode: "dark",
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: darkScrollbar(),
+      },
+    },
+  },
 });
 
 var sessionId;
@@ -76,7 +84,7 @@ const messageFilter = (message) => {
 };
 
 export default function App() {
-  const [isDark] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   
   useEffect(() => {
@@ -106,12 +114,18 @@ export default function App() {
     });
 
   }, []);
+
+  const changeLighting = () => {
+    setIsDark(isDark ? false : true);
+    setTimeout(() => console.log(isDark), 1000);
+  }
   
   return (    
     <ThemeProvider theme={isDark ? { ...darkTheme } : { ...lightTheme }}>
+      <CssBaseline />
       { isConnected ? (
           <Provider store={store}>
-            <MyAppBar client={client}/>
+            <MyAppBar client={client} changeLighting={changeLighting} isDark={isDark}/>
             <div className="AppContainer">
               <div className="Groups">
                 <UsersList />

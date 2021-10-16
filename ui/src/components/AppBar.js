@@ -1,11 +1,12 @@
 import * as React from "react";
 
 import { makeStyles } from "@mui/styles";
-import { TextField, Typography, Toolbar, AppBar, IconButton } from "@mui/material";
+import { TextField, Typography, Toolbar, AppBar, IconButton, ButtonGroup } from "@mui/material";
 import Grid from '@mui/material/Grid';
-import Brightness3Icon from '@mui/icons-material/Brightness3';
+
 import Brightness2Icon from '@mui/icons-material/Brightness2';
 import Brightness5Icon from '@mui/icons-material/Brightness5';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import { userNameChanged } from "../reducers/userNameSlice";
 import { useSelector } from "react-redux";
@@ -42,6 +43,11 @@ export default function MyAppBar(props) {
     props.client.send('/user/change/name', {}, event.target.value);
   }
 
+  const lighting = () => {
+    props.changeLighting();
+  }
+
+
   return (
     <AppBar position="fixed">
       <Toolbar className={classes.appBar}>
@@ -56,9 +62,14 @@ export default function MyAppBar(props) {
           </Grid>
 
           <Grid item xs={1}>
-            <IconButton color="secondary" aria-label="dark-light-mode">
-              <Brightness2Icon />
-            </IconButton>
+            {/* <ButtonGroup variant="text" aria-label="outlined primary button group"> */}
+              <IconButton aria-label="dark-light-mode" onClick={lighting} sx={{color: "yellow"}}>
+                {props.isDark ? <Brightness5Icon />  : <Brightness2Icon />}
+              </IconButton>
+              <IconButton aria-label="dark-light-mode" sx={{color: "white"}}>
+                <SettingsIcon />
+              </IconButton>
+            {/* </ButtonGroup> */}
           </Grid>
         </Grid>
       </Toolbar>

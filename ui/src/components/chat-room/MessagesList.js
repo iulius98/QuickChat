@@ -3,7 +3,6 @@ import MessageBox from "./MessageBox";
 
 import { useSelector } from "react-redux";
 
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 
@@ -29,22 +28,22 @@ export default function MessagesList() {
 
   const getScroll = () => {
     if (window.pageYOffset !== undefined) {
-        console.log(" Y-axis : " + window.pageYOffset); 
+        // console.log(" Y-axis : " + window.pageYOffset); 
         return window.pageYOffset;
     } else {
         var y_axis, doc = document,
             ele = doc.documentElement,
             b = doc.body;
         y_axis = ele.scrollTop || b.scrollTop || 0;
-        console.log(" Y-axis : " + y_axis);
+        // console.log(" Y-axis : " + y_axis);
         return y_axis;
     }
 }
 
   useEffect(() => {
-    getScroll() 
+    // getScroll() 
     document.getElementById("last").scrollIntoView(true);
-    getScroll(); 
+    // getScroll(); 
   }, [messages]);
 
   return (
