@@ -5,17 +5,28 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 
-const messageStyles = makeStyles((theme) => {
-  return {
-    paper: {
-      width: "fit-content",
-      height: "auto",
-      maxWidth: "90%",
-      minWidth: "20%",
-      margin: "1%",
-      float: (props) => {
-        if (props.author === "Me") return "left";
-        return "right";
+const messageStyles = makeStyles((theme) => ({
+    root: {
+      width: "100%", 
+      display: "inline-block", 
+      margin: 0, 
+      padding: 0,
+
+      "&.paper": {
+        width: "fit-content",
+        height: "auto",
+        maxWidth: "90%",
+        minWidth: "20%",
+        margin: "1%",
+        borderRadius: "15px",
+        float: (props) => {
+          if (props.author === "Me") return "left";
+          return "right";
+        },
+        backgroundColor: (props) => {
+          if (props.author === "Me") return "#00cf00";
+          return "#6699ff";
+        }
       },
     },
     author: {
@@ -35,15 +46,15 @@ const messageStyles = makeStyles((theme) => {
       paddingRight: "2%",
       margin: "5%",
     },
-  };
-});
+  })
+);
 
 export default function MessageBox(props) {
   const classes = messageStyles(props);
 
   return (
-    <Box sx={{width: "100%", display: "inline-block", margin: 0, padding: 0}}>
-      <Paper sx={{backgroundColor: "#bdbdbd", borderRadius: "15px" }} className={classes.paper}>
+    <div className={classes.root}>
+      <Paper className={classes.root + " paper"}>
         <Typography variant="h6" className={classes.author}>
           {props.author}
         </Typography>
@@ -54,6 +65,6 @@ export default function MessageBox(props) {
           {new Date(props.timestamp).toTimeString().substr(0,5)}
         </Typography>
       </Paper>
-    </Box>
+    </div>
   );
 }

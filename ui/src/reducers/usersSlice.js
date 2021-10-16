@@ -13,9 +13,7 @@ const usersSlice = createSlice({
       state.push(action.payload);
     }, 
     userDeleted(state, action) {
-      const newState = state.filter((obj) => {return obj.id !== action.payload.id})
-      console.log(newState);
-      return newState; //state.filter((obj) => {return obj.id !== action.payload.id});
+      return state.filter((obj) => {return obj.id !== action.payload.id});
     }, 
     userUpdated(state, action) {
       return state.map((obj) => obj.id === action.payload.id ? {...obj, name: action.payload.name} : obj);

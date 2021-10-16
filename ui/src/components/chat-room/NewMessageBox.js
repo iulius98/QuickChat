@@ -39,8 +39,10 @@ export default function NewMessageBox(props) {
       variant='outlined' 
       color="primary" 
       value={content}
-      sx={{width: "90%", borderRadius: "50px"}}
+      sx={{width: "75%", borderRadius: "50px"}}
       onChange={onContentChanged}
+      maxRows={12}
+      multiline={true}
       onKeyPress={(event) => {
         if (event.key === 'Enter')
             onSubmit();
@@ -51,6 +53,7 @@ export default function NewMessageBox(props) {
           <SendSharp color="secondary"/>
         </IconButton>
       </InputAdornment>
-    } />
+    } 
+    />
   );
 }
