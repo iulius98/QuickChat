@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, createContext } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/App.css";
 
 import store from "./app/store";
@@ -12,7 +12,7 @@ import darkScrollbar from '@mui/material/darkScrollbar';
 
 import ChatRoom from "./components/chat-room/ChatRoom";
 import MyAppBar from "./components/appBar/AppBar";
-import UsersList from "./components/users/UsersList";
+import UsersPage from "./components/users/UsersPage";
 
 import * as constants from "./app/constants";
 
@@ -27,9 +27,9 @@ const messageFilter = (message) => {
   // called when the client receives a STOMP message from the server
   if (message) {
     if (message.body) {
-      console.log("Am primit: ");
+      // console.log("Am primit: ");
       const generalMessage = JSON.parse(message.body);
-      console.log(generalMessage);
+      // console.log(generalMessage);
       switch (generalMessage.messageType) {
         case constants.MESSAGE:
           store.dispatch(messageAdded(generalMessage));
@@ -56,7 +56,7 @@ const messageFilter = (message) => {
         break;
       }
     } else {
-      console.log('Got empty message');
+      console.log('GOT EMPTY MESSAGE!');
     }
   }
 };
@@ -124,7 +124,7 @@ export default function App() {
             <MyAppBar client={client} lightingMode={lightingMode}/>
             <div className="AppContainer">
               <div className="Groups">
-                <UsersList />
+                <UsersPage />
               </div>
 
               <div className="ChatRoom">

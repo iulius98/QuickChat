@@ -11,9 +11,7 @@ export default function ChatRoom(props) {
       <div className="MessagesList">
         <MessagesList />
       </div>
-      {/* <div className="Divider">
-        <hr style={{width: "98%"}}/>
-      </div> */}
+      
       <div className="NewMessageBox">
         <NewMessageBox client={props.client} sessionId={props.sessionId}/>
       </div>

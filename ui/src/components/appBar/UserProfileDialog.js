@@ -31,27 +31,27 @@ export default function UserProfileDialog(props) {
 
     return (
         <Dialog open={props.openDialog} onClose={handleClose}>
-        <DialogTitle>Profile</DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-            Set your user name.
-            </DialogContentText>
-            <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Your user name: "
-            type="text"
-            fullWidth
-            value={auxUserName}
-            variant="standard"
-            onChange={handleChangeUserName}
-            />
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={handleClose}>Ok</Button>
-            <Button onClick={handleAccept}>Accept</Button>
-        </DialogActions>
+            <DialogTitle> Profile </DialogTitle>
+
+            <DialogContent>
+                <DialogContentText> Set your user name (only 20 characters are allowed). </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Your user name: "
+                    type="text"
+                    fullWidth
+                    value={auxUserName}
+                    variant="standard"
+                    onChange={handleChangeUserName}
+                />
+            </DialogContent>
+            
+            <DialogActions>
+                <Button onClick={handleClose}>Ok</Button>
+                <Button onClick={handleAccept}>Accept</Button>
+            </DialogActions>
         </Dialog>
     );
 }
