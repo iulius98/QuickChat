@@ -15,6 +15,8 @@ import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.Alerts.UserAlert;
 
+import DTO.UserDTO;
+
 @RestController
 public class UserController {
 	
@@ -29,11 +31,11 @@ public class UserController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/user/create")
-	public User createTemporaryUser(@RequestBody User user) {
+	public UserDTO createTemporaryUser(@RequestBody User user) {
 		user.setId(UUID.randomUUID().toString());
 		user.setSessionId(UUID.randomUUID().toString());
 		sessionKeyToUser.put(user.getSessionId(), user);
-		return user;
+		return user.toUserDTO();
 	}
 	
 	@MessageMapping("/user/change/name")

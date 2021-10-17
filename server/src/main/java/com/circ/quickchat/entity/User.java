@@ -2,35 +2,44 @@ package com.circ.quickchat.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import DTO.UserDTO;
 import constant.ChatConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @SuperBuilder
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 	
 	private String id;
 	
-	@JsonIgnoreProperties
+	@JsonIgnore(value = true)
 	private String sessionId;
 	
 	private String name;
 	
 	private long timestamp;
 	
-	@JsonIgnoreProperties
+	@JsonIgnore(value = true)
 	private boolean isConnect = false;
 	
-	@JsonIgnoreProperties
+	@JsonIgnore(value = true)
 	private String currentChatId = ChatConstants.principalChatId;
 	
 	public User() {
+	}
+	
+	public UserDTO toUserDTO() {
+		return UserDTO.builder().id(this.id)
+				.sessionid(this.sessionId)
+				.name(this.name)
+				.timestamp(timestamp).build();
 	}
 	
 	
