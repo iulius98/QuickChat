@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,4 +64,14 @@ public class ChatController {
 		userService.addUserInChat(chat, userId);
 	}
 	
+	@GetMapping("user/{sessionId}/chat/{chatId}")
+	public Chat getChat(@PathVariable String sessionId, @PathVariable String chatId) {
+		Chat requestChat = chats.get(chatId);
+		if (requestChat != null) {
+			sessionKeyToUser.get(sessionId).setCurrentChatId(chatId);
+			return requestChat;
+		} else {
+			throw new InternalError("Bad chatId");
+		}
+	}
 }

@@ -7,6 +7,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class ActionChatMessage extends GeneralMessage<Chat> {
+public class ActionChatMessage extends GeneralMessage<String> {
 	private User user;
 }

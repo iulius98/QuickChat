@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.Alerts.UserAlert;
 
@@ -22,6 +23,9 @@ public class UserController {
 	
 	@Autowired
 	UserAlert userAlert;
+	
+	@Autowired
+	Map<String, Chat> chats;
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/user/create")
@@ -35,7 +39,16 @@ public class UserController {
 	@MessageMapping("/user/change/name")
 	public void processChageUserName(String newName,  SimpMessageHeaderAccessor  headerAccessor) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
+		User user = sessionKeyToUser.get(sessionId);
+		chats.values().forEach(chat -> {
+			if (chat.getUsers().contains(user)) {
+				User newUser = user;
+				newUser.setName(newName);
+				chat.getUsers().remove(user);
+				chat.getUsers().add(newUser);
+			}
+		});
 		sessionKeyToUser.get(sessionId).setName(newName);
-		userAlert.updateUser(sessionKeyToUser.get(sessionId));
+		userAlert.updateUser(user);
 	}
 }

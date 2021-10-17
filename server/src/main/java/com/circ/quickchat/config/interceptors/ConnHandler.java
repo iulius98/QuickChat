@@ -70,7 +70,7 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				userAlert.sendUserListTo(sessionId);
+				//userAlert.sendUserListTo(sessionId);
 				chatAllert.sendChatToUser(chats.get(ChatConstants.principalChatId), sessionId);
 			}
 		}).start();

@@ -1,17 +1,18 @@
 package com.circ.quickchat.utils.Alerts;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.circ.quickchat.entity.ActionUserMessage;
+import com.circ.quickchat.entity.Chat;
+import com.circ.quickchat.entity.User;
 import com.circ.quickchat.entity.UserListMessage;
 import com.circ.quickchat.service.UserService;
-import com.circ.quickchat.entity.User;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
 
 import constant.MessageType;

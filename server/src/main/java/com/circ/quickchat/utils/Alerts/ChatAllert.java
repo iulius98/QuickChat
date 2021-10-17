@@ -22,14 +22,17 @@ public class ChatAllert {
 	private UserUtilCommun userUtilCommun;
 	
 	public void addUserInChat(Chat chat, User user) {
-		ActionChatMessage message = ActionChatMessage.builder().content(chat).user(user)
+		ActionChatMessage message = ActionChatMessage.builder().content(chat.getId()).user(user)
 				.messageType(MessageType.ADD_USER_CHAT).build();
 		userUtilCommun.sendToUsers(message, chat.getUsers().stream().map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
+		chat.getUsers().add(user);
+		sendChatToUser(chat, user.getSessionId());
+		
 	}
 	
 	public void deleteUserInChat(Chat chat, User user) {
-		ActionChatMessage message = ActionChatMessage.builder().content(chat).user(user)
+		ActionChatMessage message = ActionChatMessage.builder().content(chat.getId()).user(user)
 				.messageType(MessageType.DELETE_USER_CHAT).build();
 		userUtilCommun.sendToUsers(message, chat.getUsers().stream().map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));

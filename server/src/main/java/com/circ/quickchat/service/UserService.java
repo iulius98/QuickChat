@@ -29,7 +29,6 @@ public class UserService {
 			//String sessionIdForUser = entrySet.getKey();
 			if (user.getId().equals(userId)) {
 				chatAllert.addUserInChat(chat, user);
-				chat.getUsers().add(user);
 			}
 		});
 	

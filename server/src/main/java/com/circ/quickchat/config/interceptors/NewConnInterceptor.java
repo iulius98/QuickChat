@@ -26,7 +26,7 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 	private Map<String, User> sessionKeyToUser;
 	
 	@Autowired
-	private UserService UserService;
+	private UserService userService;
 	
 	@Autowired
 	private UserAlert userAlert;
@@ -58,7 +58,7 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
 		User newUser = sessionKeyToUser.get(sessionId);
 		userAlert.connectNewUser(newUser);
-		UserService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
+		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
 	}
 
 }
