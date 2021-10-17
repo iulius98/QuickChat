@@ -44,16 +44,18 @@ export default function NewMessageBox(props) {
       maxRows={12}
       multiline={true}
       onKeyPress={(event) => {
-        if (event.key === 'Enter')
-            onSubmit();
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          onSubmit();
+        } 
       }}
       endAdornment = {
-      <InputAdornment position="end">
-        <IconButton color="primary" aria-label="upload picture" component="span" onClick={onSubmit}>
-          <SendSharp color="secondary"/>
-        </IconButton>
-      </InputAdornment>
-    } 
+        <InputAdornment position="end">
+          <IconButton color="primary" aria-label="upload picture" component="span" onClick={onSubmit}>
+            <SendSharp color="secondary"/>
+          </IconButton>
+        </InputAdornment>
+      } 
     />
   );
 }
