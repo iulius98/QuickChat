@@ -31,6 +31,9 @@ const messageFilter = (message) => {
       const generalMessage = JSON.parse(message.body);
       // console.log(generalMessage);
       switch (generalMessage.messageType) {
+        case constants.CHAT_MESSAGE:
+          console.log(generalMessage);
+        break;
         case constants.MESSAGE:
           store.dispatch(messageAdded(generalMessage));
         break;
@@ -52,7 +55,7 @@ const messageFilter = (message) => {
         break;
 
         default:
-          console.log("MESSAGE TYPE NOT RECOGNIZED!");
+          console.log(`MESSAGE TYPE NOT RECOGNIZED: ${generalMessage.messageType}`);
         break;
       }
     } else {
@@ -92,7 +95,9 @@ export default function App() {
               name: store.getState().userName,
               timestamp: Date.now(),
     }).then(function (response) {
-      sessionId = response.data.id;
+      // console.log(response);
+      sessionId = response.data.sessionId;
+      setIsConnected(true);
 
       var ws = new SockJS(`${constants.serverHost}/ws-quick?sessionId=${sessionId}`);
       client = Stomp.over(ws);

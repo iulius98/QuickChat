@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class UserDTO {
 	private String id;
-	private String sessionid;
+	private String sessionId;
 	private String name;
 	private long timestamp;
 }

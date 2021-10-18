@@ -1,7 +1,5 @@
 package com.circ.quickchat.entity;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -37,7 +35,7 @@ public class User {
 	
 	public UserDTO toUserDTO() {
 		return UserDTO.builder().id(this.id)
-				.sessionid(this.sessionId)
+				.sessionId(this.sessionId)
 				.name(this.name)
 				.timestamp(timestamp).build();
 	}

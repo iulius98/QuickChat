@@ -47,7 +47,7 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 			.forEach(entrySet -> {
 				Chat chatForUser = entrySet.getValue();
 				chatForUser.getUsers().remove(user);
-				if (chatForUser.getUsers().isEmpty()) {
+				if (chatForUser.getUsers().isEmpty() && !chatForUser.getId().equals(ChatConstants.principalChatId)) {
 					removedChats.add(entrySet.getKey());
 				} else {
 					chatAllert.deleteUserInChat(chatForUser, user);

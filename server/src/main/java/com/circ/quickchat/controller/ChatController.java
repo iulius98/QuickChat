@@ -1,5 +1,6 @@
 package com.circ.quickchat.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
@@ -53,7 +54,8 @@ public class ChatController {
 		User userThatCreatedChat = sessionKeyToUser.get(sessionId);
 		HashSet<User> usersFromChat = new HashSet<User>();
 		usersFromChat.add(userThatCreatedChat);
-		Chat chat = Chat.builder().id(UUID.randomUUID().toString()).users(usersFromChat).build();
+		Chat chat = Chat.builder().id(UUID.randomUUID().toString())
+				.users(usersFromChat).messages(new ArrayList<Message>()).build();
 		chats.put(chat.getId(), chat);
 		return chat;
 	}
