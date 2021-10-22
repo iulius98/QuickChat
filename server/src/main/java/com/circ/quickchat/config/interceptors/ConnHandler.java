@@ -33,9 +33,6 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 	private ChatAllert chatAllert;
 	
 	@Autowired
-	private Map<String, Chat> chats;
-	
-	@Autowired
 	private UserService userService;
 	
 	@Autowired

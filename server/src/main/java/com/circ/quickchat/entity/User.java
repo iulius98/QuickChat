@@ -1,5 +1,7 @@
 package com.circ.quickchat.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,11 +23,12 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 	
 	@Column(name = "session_id")
@@ -35,7 +38,7 @@ public class User {
 	private String name;
 	
 	@Column(name = "created_at")
-	private long createdAt;
+	private Timestamp createdAt;
 	
 	@OneToOne
 	@JoinColumn(name = "photo_profile_id")

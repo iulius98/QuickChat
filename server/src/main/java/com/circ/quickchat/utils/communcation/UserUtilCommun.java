@@ -13,24 +13,7 @@ import com.circ.quickchat.entity.User;
 public class UserUtilCommun {
 
 	@Autowired
-	private Map<String, User> sessionKeyToUser;
-
-	@Autowired
 	public SimpMessageSendingOperations send;
-
-	public void sendToUsersWithExcept(String sessionIdExcept, Object message) {
-		sessionKeyToUser.keySet().stream().forEach(key -> {
-			if (!key.equals(sessionIdExcept)) {
-				send.convertAndSendToUser(key, "/usertell", message);
-			}
-		});
-	}
-
-	public void sendToAllUsers(Object message) {
-		sessionKeyToUser.keySet().stream().forEach(key -> {
-			send.convertAndSendToUser(key, "/usertell", message);
-		});
-	}
 	
 	public void sendToUser(String sessionId, Object message) {
 			send.convertAndSendToUser(sessionId, "/usertell", message);
