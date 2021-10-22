@@ -4,5 +4,5 @@ import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-public class ChatMessage extends GeneralMessage<Chat> {
+public class ChatMessage extends GeneralMessage<Object> {
 }

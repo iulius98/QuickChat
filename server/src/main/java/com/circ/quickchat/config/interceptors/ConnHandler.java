@@ -58,25 +58,21 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		super.afterConnectionEstablished(session);
-		String sessionId = (String) session.getAttributes().get("sessionId");
-		
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				//userAlert.sendUserListTo(sessionId);
-				chatAllert.sendChatToUser(chats.get(ChatConstants.principalChatId), sessionId);
-			}
-		}).start();
-
+//		String sessionId = (String) session.getAttributes().get("sessionId");
+//
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+////				userAlert.sendUserListTo(sessionId);
+////				chatAllert.sendChatToUser(chats.get(ChatConstants.principalChatId), sessionId);
+//			}
+//		}).start();
 	}
-	
-	
-
 }

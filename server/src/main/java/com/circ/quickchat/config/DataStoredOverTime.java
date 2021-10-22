@@ -25,8 +25,8 @@ public class DataStoredOverTime {
 	@Bean
 	public Map<String, Chat> chats() {
 		HashMap<String, Chat> chats = new HashMap<String, Chat>();
-		chats.put(ChatConstants.principalChatId, Chat.builder().id(ChatConstants.principalChatId)
-				.users(new HashSet<User>()).messages(new ArrayList<Message>()).build());
+//		chats.put(ChatConstants.principalChatId, Chat.builder().id(ChatConstants.principalChatId)
+//				.users(new HashSet<User>()).messages(new ArrayList<Message>()).build());
 		return chats;
 	}
 

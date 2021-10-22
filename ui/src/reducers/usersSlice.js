@@ -11,16 +11,23 @@ const usersSlice = createSlice({
     },
     userAdded(state, action) {
       state.push(action.payload);
-    }, 
+    },
     userDeleted(state, action) {
-      return state.filter((obj) => {return obj.id !== action.payload.id});
-    }, 
+      return state.filter((obj) => {
+        return obj.id !== action.payload.id;
+      });
+    },
     userUpdated(state, action) {
-      return state.map((obj) => obj.id === action.payload.id ? {...obj, name: action.payload.name} : obj);
-    }
+      return state.map((obj) =>
+        obj.id === action.payload.id
+          ? { ...obj, name: action.payload.name }
+          : obj
+      );
+    },
   },
 });
 
-export const { usersListUpdated, userAdded, userDeleted, userUpdated } = usersSlice.actions;
+export const { usersListUpdated, userAdded, userDeleted, userUpdated } =
+  usersSlice.actions;
 
 export default usersSlice.reducer;

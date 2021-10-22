@@ -10,12 +10,12 @@
   grid-template-columns: 0.6fr 1.4fr;
   grid-template-rows: 1fr;
   gap: 0px 0.5%;
-  grid-template-areas: "Groups ChatRoom";
+  grid-template-areas: "ChatsNavigation ChatRoom";
 }
 
-.Groups {
+.ChatsNavigation {
   box-sizing: border-box;
-  grid-area: Groups;
+  grid-area: ChatsNavigation;
   min-height: 0;
   width: 100%;
   padding: 1%;
@@ -36,4 +36,5 @@
   border-radius: 15px;
   border-style: groove;
   border-width: 2px;
+  border-top-style: hidden;
 }

@@ -1,8 +1,14 @@
+// SERVER MESSAGE TYPES
 export const MESSAGE = "MESSAGE";
 export const UPGRADE_LIST_USERS = "UPGRADE_LIST_USERS";
 export const ADD_USER = "ADD_USER";
 export const DELETE_USER = "DELETE_USER";
 export const UPDATE_USER = "UPDATE_USER";
-export const CHAT_MESSAGE = "CHAT_MESSAGE";
+export const ADD_USER_CHAT = "ADD_USER_CHAT";
+export const DELETE_USER_CHAT = "DELETE_USER_CHAT";
+export const NEW_CHAT = "NEW_CHAT";
+export const REQUESTED_CHAT = "REQUESTED_CHAT";
 
+// APP CONSTANTS
+export const principalChatId = "2021";
 export const serverHost = process.env.NODE_ENV !== "development" ? "" : "http://localhost:8080";

@@ -1,4 +1,4 @@
-import React,  { useEffect } from 'react';
+import React, { useEffect } from "react";
 import MessageBox from "./MessageBox";
 
 import { useSelector } from "react-redux";
@@ -13,12 +13,12 @@ const messagesListStyles = makeStyles((theme) => {
       overflowY: "auto",
     },
     box: {
-      width: "100%", 
-      display: "inline-block", 
+      width: "100%",
+      display: "inline-block",
       visibility: "hidden",
-       height: 0, 
-       float: "left"
-    }
+      height: 0,
+      float: "left",
+    },
   };
 });
 
@@ -26,36 +26,35 @@ export default function MessagesList() {
   const messages = useSelector((state) => state.messages);
   const classes = messagesListStyles();
 
-  const getScroll = () => {
-    if (window.pageYOffset !== undefined) {
-        // console.log(" Y-axis : " + window.pageYOffset); 
-        return window.pageYOffset;
-    } else {
-        var y_axis, doc = document,
-            ele = doc.documentElement,
-            b = doc.body;
-        y_axis = ele.scrollTop || b.scrollTop || 0;
-        // console.log(" Y-axis : " + y_axis);
-        return y_axis;
-    }
-}
+  // const getScroll = () => {
+  //   if (window.pageYOffset !== undefined) {
+  //     // console.log(" Y-axis : " + window.pageYOffset);
+  //     return window.pageYOffset;
+  //   } else {
+  //     var y_axis,
+  //       doc = document,
+  //       ele = doc.documentElement,
+  //       b = doc.body;
+  //     y_axis = ele.scrollTop || b.scrollTop || 0;
+  //     // console.log(" Y-axis : " + y_axis);
+  //     return y_axis;
+  //   }
+  // };
 
   useEffect(() => {
-    // getScroll() 
+    // getScroll()
     document.getElementById("last").scrollIntoView(true);
-    // getScroll(); 
+    // getScroll();
   }, [messages]);
 
   return (
     <div className={classes.messagesList}>
-        {
-          messages.map((msg, index) => 
-            <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />) 
-        }
-        <Box className={classes.box}>
-            <div id="last" />
-        </Box>
+      {messages.map((msg) => (
+        <MessageBox key={msg.id} author={msg.author} content={msg.content} timestamp={msg.timestamp} />
+      ))}
+      <Box className={classes.box}>
+        <div id="last" />
+      </Box>
     </div>
   );
 }
-

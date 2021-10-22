@@ -1,5 +1,6 @@
 package com.circ.quickchat.entity;
 
+import DTO.AuthorDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import constant.MessageType;
@@ -15,7 +16,7 @@ public class Message extends GeneralMessage<String> {
 	
 	private String id;
 	private String chatId;
-	private String author;
+	private AuthorDTO author;
 	private Long timestamp;
 	
 	public Message() {

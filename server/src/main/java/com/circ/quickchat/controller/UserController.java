@@ -1,15 +1,14 @@
 package com.circ.quickchat.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
@@ -52,5 +51,11 @@ public class UserController {
 		});
 		sessionKeyToUser.get(sessionId).setName(newName);
 		userAlert.updateUser(user);
+	}
+
+	@GetMapping("users/{sessionId}")
+	public List<User> getUsers(@PathVariable String sessionId) {
+		return sessionKeyToUser.entrySet().stream().filter(entry -> !entry.getKey().equals(sessionId)).map(entry ->
+				entry.getValue()).collect(Collectors.toList());
 	}
 }

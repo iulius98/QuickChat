@@ -31,12 +31,15 @@ const messagesSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
+    updateMessagesList(state, action) {
+      return action.payload;
+    },
     messageAdded(state, action) {
       state.push(action.payload);
     },
   },
 });
 
-export const { messageAdded } = messagesSlice.actions;
+export const { updateMessagesList, messageAdded } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

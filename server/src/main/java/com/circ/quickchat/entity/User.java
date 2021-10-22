@@ -28,7 +28,7 @@ public class User {
 	private boolean isConnect = false;
 	
 	@JsonIgnore(value = true)
-	private String currentChatId = ChatConstants.principalChatId;
+	private String currentChatId;
 	
 	public User() {
 	}

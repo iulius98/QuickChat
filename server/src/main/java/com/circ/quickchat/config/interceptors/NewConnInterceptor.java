@@ -53,12 +53,12 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
-		String sessionId = queryParams.get("sessionId")[0];
-		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
-		User newUser = sessionKeyToUser.get(sessionId);
-		userAlert.connectNewUser(newUser);
-		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
+//		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
+//		String sessionId = queryParams.get("sessionId")[0];
+//		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
+//		User newUser = sessionKeyToUser.get(sessionId);
+//		userAlert.connectNewUser(newUser);
+//		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
 	}
 
 }

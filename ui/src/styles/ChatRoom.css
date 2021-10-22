@@ -5,6 +5,21 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 0;
+}
+
+.ChatAppBar {
+  box-sizing: border-box;
+  display: block;
+  width: auto;
+  min-height: min-content;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  max-width: 100%;
+  flex-basis: 10%;
+  /* border-bottom-style: groove;
+  border-radius: 10px;
+  border-bottom-width: 2px; */
 }
 
 .MessagesList {
@@ -13,7 +28,7 @@
   margin: 0;
   max-width: 100%;
   padding: 1%;
-  flex-basis: 90%;
+  flex-basis: 80%;
   min-height: 0;
   display: inline-block;
   overflow-x: hidden;

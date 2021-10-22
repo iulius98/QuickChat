@@ -2,6 +2,8 @@ package com.circ.quickchat.utils.Alerts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,8 @@ public class ChatAllert {
 	public void addUserInChat(Chat chat, User user) {
 		ActionChatMessage message = ActionChatMessage.builder().content(chat.getId()).user(user)
 				.messageType(MessageType.ADD_USER_CHAT).build();
-		userUtilCommun.sendToUsers(message, chat.getUsers().stream().map(usr -> usr.getSessionId())
+		userUtilCommun.sendToUsers(message, chat.getUsers().stream().filter(usr -> usr.getCurrentChatId() != null &&
+						usr.getCurrentChatId().equals(chat.getId())).map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
 		chat.getUsers().add(user);
 		sendChatToUser(chat, user.getSessionId());
@@ -39,7 +42,10 @@ public class ChatAllert {
 	}
 	
 	public void sendChatToUser(Chat chat, String sessionId) {
-		ChatMessage message = ChatMessage.builder().content(chat).messageType(MessageType.CHAT_MESSAGE).build();
+		Map<String, String> newChatContent = new HashMap<>();
+		newChatContent.put("chatId", chat.getId());
+		newChatContent.put("chatName", chat.getName());
+		ChatMessage message = ChatMessage.builder().content(newChatContent).messageType(MessageType.NEW_CHAT).build();
 		userUtilCommun.sendToUser(sessionId, message);
 	}
 }

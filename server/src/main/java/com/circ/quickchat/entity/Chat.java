@@ -12,6 +12,7 @@ import lombok.Setter;
 @Builder
 public class Chat {
 	private String id;
+	private String name;
 	private Set<User> users;
 	private List<Message> messages;
 }

@@ -24,7 +24,8 @@ public class ChatService {
 		Chat chat = chats.get(message.getChatId());
 		chat.getMessages().add(message);
 		List<String> usersFromChatWithoutAuthor = new ArrayList<String>();
-		chat.getUsers().forEach(user -> {
+		chat.getUsers().stream().filter(usr -> usr.getCurrentChatId() != null &&
+				usr.getCurrentChatId().equals(chat.getId())).forEach(user -> {
 			if(!user.getSessionId().equals(sessionIdAuthor)) {
 				usersFromChatWithoutAuthor.add(user.getSessionId());
 			}
