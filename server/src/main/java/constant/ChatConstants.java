@@ -6,5 +6,4 @@ public class ChatConstants {
 		// This class is uses only for keeping constants
 	}
 	
-	public static final String principalChatId = "2021";
 }

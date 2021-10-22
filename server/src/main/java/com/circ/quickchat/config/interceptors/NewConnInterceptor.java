@@ -22,17 +22,9 @@ import constant.ChatConstants;
 @Component
 public class NewConnInterceptor implements HandshakeInterceptor{
 	
-	@Autowired
-	private Map<String, User> sessionKeyToUser;
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private UserAlert userAlert;
-	
-	@Autowired
-	private Map<String, Chat> chats;
 	
 
 	@Override
@@ -42,23 +34,27 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 		if (queryParams.containsKey("sessionId")) {
 			String sessionId = queryParams.get("sessionId")[0];
 			attributes.put("sessionId", sessionId);
-			if (!sessionKeyToUser.containsKey(sessionId)) {
-				throw new InternalError("Bad sessionId");
-				//TODO handle exception
-			}
+			userService.getUserBySessionId(sessionId);
 		}
 		return true;
 	}
 
+
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception exception) {
-		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
-		String sessionId = queryParams.get("sessionId")[0];
-		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
-		User newUser = sessionKeyToUser.get(sessionId);
-		userAlert.connectNewUser(newUser);
-		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
+		
 	}
+
+//	@Override
+//	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
+//			Exception exception) {
+//		Map<String, String[]> queryParams = HttpUtils.parseQueryString(request.getURI().getQuery());
+//		String sessionId = queryParams.get("sessionId")[0];
+//		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
+//		User newUser = sessionKeyToUser.get(sessionId);
+//		userAlert.connectNewUser(newUser);
+//		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
+//	}
 
 }

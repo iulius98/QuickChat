@@ -16,18 +16,5 @@ import constant.ChatConstants;
 
 @Configuration
 public class DataStoredOverTime {
-	
-	@Bean
-	public Map<String, User> sessionKeyToUser() {
-		return new HashMap<>();
-	}
-	
-	@Bean
-	public Map<String, Chat> chats() {
-		HashMap<String, Chat> chats = new HashMap<String, Chat>();
-		chats.put(ChatConstants.principalChatId, Chat.builder().id(ChatConstants.principalChatId)
-				.users(new HashSet<User>()).messages(new ArrayList<Message>()).build());
-		return chats;
-	}
 
 }

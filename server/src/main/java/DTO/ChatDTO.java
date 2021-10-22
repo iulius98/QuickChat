@@ -1,13 +1,13 @@
 package DTO;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
 @Getter
 @Setter
-public class UserDTO {
+@Builder
+public class ChatDTO {
 	private Long id;
 	private String name;
 }

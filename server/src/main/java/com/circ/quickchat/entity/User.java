@@ -1,10 +1,17 @@
 package com.circ.quickchat.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import DTO.UserDTO;
-import constant.ChatConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -13,31 +20,37 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "user")
 public class User {
 	
-	private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	@JsonIgnore(value = true)
+	@Column(name = "session_id")
 	private String sessionId;
 	
+	@Column(name = "name")
 	private String name;
 	
-	private long timestamp;
+	@Column(name = "created_at")
+	private long createdAt;
 	
-	@JsonIgnore(value = true)
-	private boolean isConnect = false;
+	@OneToOne
+	@JoinColumn(name = "photo_profile_id")
+	private Photo photo;
 	
-	@JsonIgnore(value = true)
-	private String currentChatId = ChatConstants.principalChatId;
+	@OneToOne
+	@JoinColumn(name = "current_chat_id")
+	private Chat currentChat;
 	
 	public User() {
 	}
 	
 	public UserDTO toUserDTO() {
 		return UserDTO.builder().id(this.id)
-				.sessionId(this.sessionId)
-				.name(this.name)
-				.timestamp(timestamp).build();
+				.name(this.name).build();
 	}
 	
 	

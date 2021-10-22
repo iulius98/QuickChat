@@ -4,56 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.circ.quickchat.entity.ActionUserMessage;
 import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
-import com.circ.quickchat.entity.UserListMessage;
+import com.circ.quickchat.service.ChatService;
 import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
+import com.circ.quickchat.websocket.UserAndChat;
+import com.circ.quickchat.websocket.WebsocketMessage;
 
 import constant.MessageType;
 
 @Component
 public class UserAlert {
 	
-	@Autowired
-	private Map<String, User> sessionKeyToUser;
+	
 	
 	@Autowired
 	private UserUtilCommun userUtilCommun;
 	
 	@Autowired
-	private UserService userService;
-	
-	public void connectNewUser(User user) {
-		actionOnUser(user, MessageType.ADD_USER);
-	}
-	
-	public void disconect(User user) {
-		actionOnUser(user, MessageType.DELETE_USER);
-	}
+	private ChatService chatService;
 	
 	public void updateUser(User user) {
-		actionOnUser(user, MessageType.UPDATE_USER);
-	}
-	
-	
-	public void sendUserListTo(String sessionId) {
-		List<User> userList = sessionKeyToUser.values().stream()
-				.collect(Collectors.toList());
-		UserListMessage message = UserListMessage.builder()
-				.content(userList)
-				.messageType(MessageType.UPGRADE_LIST_USERS).build();
-		userUtilCommun.sendToUser(sessionId, message);
-	}
-	
-	private void actionOnUser(User user, MessageType actionType) {
-		ActionUserMessage message = ActionUserMessage.builder().content(user)
-				.messageType(actionType).build();
-		userUtilCommun.sendToAllUsers(message);
+		List<Chat> chats = chatService.getChatThatContainsUser(user);
+		List<String> listUserSessionsId = chats.stream().flatMap(chat -> {
+			Stream<String> usersThatUseCurrentChatNow = chat.getUsers().stream()
+				.filter(userC -> userC.getCurrentChat().equals(chat))
+				.map(userC -> userC.getSessionId());
+			return usersThatUseCurrentChatNow;
+		}).collect(Collectors.toList());
+		userUtilCommun.sendToUsers(WebsocketMessage.builder()
+				.messageType(MessageType.UPDATE_USER).content(user.toUserDTO()), listUserSessionsId);
 	}
 }
