@@ -1,14 +1,15 @@
 package com.circ.quickchat.websocket;
 
+
 import DTO.UserDTO;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 public class UserAndChat {
-	private final UserDTO userDTO;
-	private final Long chatId;
+	protected UserDTO user;
+	protected Long chatId;
 }

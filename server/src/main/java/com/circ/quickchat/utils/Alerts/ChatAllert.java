@@ -1,7 +1,6 @@
 package com.circ.quickchat.utils.Alerts;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,12 @@ public class ChatAllert {
 	
 	public void addUserInChat(Chat chat, User user) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder().content(UserAndChat.builder()
-				.userDTO(user.toUserDTO()).chatId(chat.getId())).messageType(MessageType.ADD_USER_CHAT).build();
+				.user(user.toUserDTO()).chatId(chat.getId()).build()).messageType(MessageType.ADD_USER_CHAT).build();
 		
-		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream().map(usr -> usr.getSessionId())
+		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream()
+				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(chat)).map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
+		
 		chat.getUsers().add(user);
 		sendChatToUser(chat.toChatDTO(), user.getSessionId());
 		
@@ -34,7 +35,7 @@ public class ChatAllert {
 	
 	public void deleteUserInChat(Chat chat, User user) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder()
-				.content(UserAndChat.builder().chatId(chat.getId()).userDTO(user.toUserDTO()))
+				.content(UserAndChat.builder().chatId(chat.getId()).user(user.toUserDTO()))
 				.messageType(MessageType.DELETE_USER_CHAT).build();
 		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream().map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
@@ -42,7 +43,7 @@ public class ChatAllert {
 	
 	public void sendChatToUser(Object chat, String sessionId) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder()
-				.content(chat).messageType(MessageType.CHAT_MESSAGE).build();
+				.content(chat).messageType(MessageType.NEW_CHAT).build();
 		userUtilCommun.sendToUser(sessionId, websocketMessage);
 	}
 }

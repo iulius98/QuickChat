@@ -8,6 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class UserDTO {
-	private Long id;
-	private String name;
+	protected Long id;
+	protected String name;
 }

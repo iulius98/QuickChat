@@ -1,0 +1,48 @@
+.ChatRoomContainer {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.ChatAppBar {
+  box-sizing: border-box;
+  display: block;
+  width: auto;
+  min-height: min-content;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  max-width: 100%;
+  flex-basis: 10%;
+  /* border-bottom-style: groove;
+  border-radius: 10px;
+  border-bottom-width: 2px; */
+}
+
+.MessagesList {
+  box-sizing: border-box;
+  width: auto;
+  margin: 0;
+  max-width: 100%;
+  padding: 1%;
+  flex-basis: 80%;
+  min-height: 0;
+  display: inline-block;
+  overflow-x: hidden;
+}
+
+.NewMessageBox {
+  box-sizing: border-box;
+  display: flex;
+  padding: 1%;
+  border-top-style: groove;
+  border-radius: 10px;
+  border-top-width: 2px;
+  flex-basis: 10%;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+}

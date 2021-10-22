@@ -1,5 +1,7 @@
 package com.circ.quickchat.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import DTO.MessageDTO;
+import DTO.UserDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +32,7 @@ public class Message {
 	
 	@ManyToOne
 	@JoinColumn(name = "chat_id")
+	@JsonIgnoreProperties("messages")	
 	private Chat chat;
 	
 	@ManyToOne
@@ -39,6 +44,15 @@ public class Message {
 	
 	@Column(name = "content")
 	private String content;
+	
+	public Message() {
+		
+	}
+	
+	public MessageDTO toMessageDTO() {
+		return MessageDTO.builder().id(id).author(UserDTO.builder().id(author.getId())
+				.name(author.getName()).build()).content(content).createdAt(createdAt).build();
+	}
 	
 	/*
 	 * public Message() { super.messageType = MessageType.MESSAGE; }

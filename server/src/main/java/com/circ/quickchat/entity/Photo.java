@@ -10,10 +10,11 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "photo")
 public class Photo {
@@ -26,4 +27,8 @@ public class Photo {
 	
 	@Column(name = "jpeg_photo_uri")
 	private String jpegPhotoUri;
+	
+	public Photo() {
+		
+	}
 }

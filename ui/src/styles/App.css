@@ -1,0 +1,40 @@
+.AppContainer {
+  box-sizing: border-box;
+  position: relative;
+  top: 67px;
+  height: calc(100% - 67px);
+  max-height: 91%;
+  width: 100%;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 0.6fr 1.4fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0.5%;
+  grid-template-areas: "ChatsNavigation ChatRoom";
+}
+
+.ChatsNavigation {
+  box-sizing: border-box;
+  grid-area: ChatsNavigation;
+  min-height: 0;
+  width: 100%;
+  padding: 1%;
+  max-width: 100%;
+  overflow-y: auto;
+  border-radius: 15px;
+  border-style: groove;
+  border-width: 2px;
+}
+
+.ChatRoom {
+  box-sizing: border-box;
+  grid-area: ChatRoom;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  border-radius: 15px;
+  border-style: groove;
+  border-width: 2px;
+  border-top-style: hidden;
+}

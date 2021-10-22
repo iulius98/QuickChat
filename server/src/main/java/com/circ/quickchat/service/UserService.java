@@ -33,7 +33,7 @@ public class UserService {
 	}
 
 	public User getUserBySessionId(String sessionId) {
-		return userRepository.findBySessionId(sessionId)
+		return userRepository.findOneBySessionId(sessionId)
 				.orElseThrow(() -> new InternalError("User that create the chat isn't " + "into database"));
 	}
 
@@ -45,8 +45,9 @@ public class UserService {
 		userRepository.delete(user);
 	}
 
-	public List<UserDTO> getUsers() {
-		return userRepository.findAll().stream().map(user -> user.toUserDTO()).collect(Collectors.toList());
+	public List<UserDTO> getUsers(String sessionId) {
+		return userRepository.findAll().stream().filter(user -> !user.getSessionId().equals(sessionId))
+				.map(user -> user.toUserDTO()).collect(Collectors.toList());
 	}
 
 }

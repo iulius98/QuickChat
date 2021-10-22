@@ -38,7 +38,7 @@ public class User {
 	private String name;
 	
 	@Column(name = "created_at")
-	private Timestamp createdAt;
+	private Long createdAt;
 	
 	@OneToOne
 	@JoinColumn(name = "photo_profile_id")
@@ -46,15 +46,26 @@ public class User {
 	
 	@OneToOne
 	@JoinColumn(name = "current_chat_id")
+	@JsonIgnoreProperties({"users", "messages"})
 	private Chat currentChat;
 	
 	public User() {
+		
 	}
 	
 	public UserDTO toUserDTO() {
 		return UserDTO.builder().id(this.id)
 				.name(this.name).build();
 	}
+
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (obj instanceof User) {
+//			User objUser = (User) obj;
+//			return this.id.equals(objUser.getId());
+//		}
+//		return false;
+//	}
 	
 	
 	

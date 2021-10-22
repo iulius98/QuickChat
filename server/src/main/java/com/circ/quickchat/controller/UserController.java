@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,8 +46,9 @@ public class UserController {
 		userAlert.updateUser(newUser);
 	}
 	
-	@GetMapping("/users")
-	public List<UserDTO> getUsers() {
-		return userService.getUsers();
+	@GetMapping("/users/{sessionId}")
+	public List<UserDTO> getUsers(@PathVariable String sessionId) {
+		return userService.getUsers(sessionId);
 	}
+	
 }

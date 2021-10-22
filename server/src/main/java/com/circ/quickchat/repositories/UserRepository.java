@@ -10,5 +10,5 @@ import com.circ.quickchat.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
 	
-	public Optional<User> findBySessionId(String sessionId);
+	public Optional<User> findOneBySessionId(String sessionId);
 }

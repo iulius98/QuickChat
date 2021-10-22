@@ -44,14 +44,16 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 		  String sessionId = (String)session.getAttributes().get("sessionId").toString();
 		  User user = userService.getUserBySessionId(sessionId);
 		  List<Chat> chats = chatService.getChatThatContainsUser(user);
-		  chats.forEach(chat -> {
-			  if (chat.getUsers().size() == 1) {
-				  chatService.deleteChat(chat);
-			  } else {
-				  chat.getUsers().remove(user);
-				  chatService.save(chat);
-			  }
-		  });
+		  if (chats != null) {
+			  chats.forEach(chat -> {
+				  if (chat.getUsers().size() == 1) {
+					  chatService.deleteChat(chat);
+				  } else {
+					  chat.getUsers().remove(user);
+					  chatService.save(chat);
+				  }
+			  });
+		  }
 		  userService.deleteUser(user);
 	}
 
