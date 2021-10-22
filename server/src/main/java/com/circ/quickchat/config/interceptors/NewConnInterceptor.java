@@ -15,7 +15,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.service.UserService;
-import com.circ.quickchat.utils.Alerts.UserAlert;
+import com.circ.quickchat.utils.Alerts.UserAllert;
 
 import constant.ChatConstants;
 

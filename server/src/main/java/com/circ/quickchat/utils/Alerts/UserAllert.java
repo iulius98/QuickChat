@@ -20,7 +20,7 @@ import com.circ.quickchat.websocket.WebsocketMessage;
 import constant.MessageType;
 
 @Component
-public class UserAlert {
+public class UserAllert {
 	
 	
 	

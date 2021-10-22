@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.service.UserService;
-import com.circ.quickchat.utils.Alerts.UserAlert;
+import com.circ.quickchat.utils.Alerts.UserAllert;
 
 import DTO.UserDTO;
 
@@ -25,7 +25,7 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private UserAlert userAlert;
+	private UserAllert userAlert;
 	
 
 	@CrossOrigin(origins = "http://localhost:3000")

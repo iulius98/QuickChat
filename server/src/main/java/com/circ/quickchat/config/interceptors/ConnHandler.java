@@ -15,7 +15,7 @@ import com.circ.quickchat.entity.User;
 import com.circ.quickchat.service.ChatService;
 import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.Alerts.ChatAllert;
-import com.circ.quickchat.utils.Alerts.UserAlert;
+import com.circ.quickchat.utils.Alerts.UserAllert;
 
 import constant.ChatConstants;
 
@@ -27,7 +27,7 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 
 	
 	@Autowired
-	private UserAlert userAlert;
+	private UserAllert userAlert;
 	
 	@Autowired
 	private ChatAllert chatAllert;
