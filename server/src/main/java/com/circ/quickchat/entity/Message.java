@@ -18,12 +18,14 @@ import DTO.MessageDTO;
 import DTO.UserDTO;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "messages")
+@SuperBuilder(toBuilder = true)
 public class Message {
 	
 	@Id
@@ -36,9 +38,11 @@ public class Message {
 	@JsonIgnoreProperties("messages")	
 	private Chat chat;
 	
-	@ManyToOne(cascade = { CascadeType.PERSIST,CascadeType.MERGE })
-	@JoinColumn(name = "author_id")
-	private User author;
+	@Column(name = "author_id")
+	private Long authorId;
+	
+	@Column(name = "author_name")
+	private String authorName;
 	
 	@Column(name = "created_at")
 	private Long createdAt;
@@ -51,8 +55,8 @@ public class Message {
 	}
 	
 	public MessageDTO toMessageDTO() {
-		return MessageDTO.builder().id(id).author(UserDTO.builder().id(author.getId())
-				.name(author.getName()).build()).content(content).createdAt(createdAt).build();
+		return MessageDTO.builder().id(id).authorId(authorId)
+				.authorName(authorName).content(content).createdAt(createdAt).build();
 	}
 	
 	/*

@@ -22,21 +22,21 @@ export default function NewMessageBox() {
 
   const onSubmit = () => {
     if (content) {
+      const timestamp = Date.now();
       const msg = {
         id: nanoid(),
-        chat: { id: profile.currentChat},
-        author: { id: profile.userId, name: "Me" },
+        authorId:  profile.userId,
+        authorName: "Me",
         content: content,
-        createdAt: Date.now(),
+        createdAt: timestamp,
       };
       dispatch(messageAdded(msg));
 
       if (wsClient) {
         const msgExt = {
           chat: { id: profile.currentChat },
-          author: { id: profile.userId, name: profile.username },
           content: content,
-          createdAt: Date.now(),
+          createdAt: timestamp,
         };
         wsClient.send("/chat", {}, JSON.stringify(msgExt));
       } else console.log("Client not defined!");

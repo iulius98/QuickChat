@@ -50,7 +50,7 @@ export default function MessagesList() {
   return (
     <div className={classes.messagesList}>
       {messages.map((msg) => (
-        <MessageBox key={msg.id} author={msg.author} content={msg.content} createdAt={msg.createdAt} />
+        <MessageBox key={msg.id} author={{id: msg.authorId, name: msg.authorName}} content={msg.content} createdAt={msg.createdAt} />
       ))}
       <Box className={classes.box}>
         <div id="last" />

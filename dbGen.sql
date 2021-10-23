@@ -24,6 +24,7 @@ CREATE TABLE chats (
 CREATE TABLE messages (
   "id" serial PRIMARY KEY,
   "author_id" bigint,
+  "author_name" varchar(20),
   "chat_id" int,
   "status" varchar(20),
   "content" varchar(10000),
@@ -51,15 +52,3 @@ ON ALL TABLES IN SCHEMA public
 TO quickchat;
 
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO quickchat;
-
-
-
-select * from users;
-select * from users_to_chat;
-select * from messages;
-select * from chats;
-
-delete from messages;
-delete from users_to_chat;
-delete from chats;
-delete from users;

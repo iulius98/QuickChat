@@ -9,7 +9,8 @@ import lombok.Setter;
 @Builder
 public class MessageDTO {
 	private Long id;
-	private UserDTO author;
+	private Long authorId;
+	private String authorName;
 	private String content;
 	private Long createdAt;
 }

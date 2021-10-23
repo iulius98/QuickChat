@@ -42,6 +42,8 @@ public class ChatController {
 	@MessageMapping("/chat")
 	public void processMessage(Message message,  SimpMessageHeaderAccessor  headerAccessor) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
+		User user = userService.getUserBySessionId(sessionId);
+		message = message.toBuilder().authorId(user.getId()).authorName(user.getName()).build();
 		chatService.sendMessage(message, sessionId);
 	}
 	

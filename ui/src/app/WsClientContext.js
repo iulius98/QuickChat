@@ -19,12 +19,11 @@ const messageFilter = (message) => {
   // called when the client receives a STOMP message from the server
   if (message) {
     if (message.body) {
-      console.log("Am primit: ");
+      // console.log("Am primit: ");
       const generalMessage = JSON.parse(message.body);
-      console.log(generalMessage);
+      // console.log(generalMessage);
       switch (generalMessage.messageType) {
         case constants.MESSAGE:
-          console.log(generalMessage);
           store.dispatch(messageAdded(generalMessage.content));
           break;
 
