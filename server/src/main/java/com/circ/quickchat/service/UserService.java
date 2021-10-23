@@ -1,7 +1,9 @@
 package com.circ.quickchat.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,18 @@ public class UserService {
 		chatAllert.addUserInChat(chat, user);
 		chatService.save(chat);
 	}
+	
+	public Chat addUsersInChat(Chat chat, List<Long> usersId) {
+		chat.setUsers(new HashSet<User>());
+		Chat temporaryChatDb = chatService.save(chat);
+		Set<User> users = getAllForIds(usersId);
+		temporaryChatDb.setUsers(users);
+		temporaryChatDb = chatService.save(temporaryChatDb);
+		users.forEach(usr -> {
+			chatAllert.addUserInChatV2(chat, usr);
+		});
+		return chatService.save(chat);
+	}
 
 	public User getUserBySessionId(String sessionId) {
 		return userRepository.findOneBySessionId(sessionId)
@@ -53,6 +67,11 @@ public class UserService {
 	
 	public void saveAll(Collection<User> users) {
 		userRepository.saveAll(users);
+	}
+	
+	public Set<User> getAllForIds(List<Long> ids) {
+		return userRepository.findAllById(ids).stream()
+				.collect(Collectors.toSet());
 	}
 
 }

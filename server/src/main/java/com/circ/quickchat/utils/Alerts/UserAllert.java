@@ -34,11 +34,11 @@ public class UserAllert {
 		List<Chat> chats = chatService.getChatThatContainsUser(user);
 		List<String> listUserSessionsId = chats.stream().flatMap(chat -> {
 			Stream<String> usersThatUseCurrentChatNow = chat.getUsers().stream()
-				.filter(userC -> userC.getCurrentChat().equals(chat))
+				.filter(userC -> userC.getCurrentChat() != null && userC.getCurrentChat().equals(chat))
 				.map(userC -> userC.getSessionId());
 			return usersThatUseCurrentChatNow;
 		}).collect(Collectors.toList());
 		userUtilCommun.sendToUsers(WebsocketMessage.builder()
-				.messageType(MessageType.UPDATE_USER).content(user.toUserDTO()), listUserSessionsId);
+				.messageType(MessageType.UPDATE_CHAT_USER).content(user.toUserDTO()).build(), listUserSessionsId);
 	}
 }

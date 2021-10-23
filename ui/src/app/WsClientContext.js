@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 import store from "./store";
 import { updateMessagesList, messageAdded } from "../reducers/messagesSlice";
-import { usersListUpdated, userAdded, userDeleted } from "../reducers/usersSlice";
+import { usersListUpdated, userAdded, userDeleted, userUpdated } from "../reducers/usersSlice";
 import { chatAdded } from "../reducers/chatsSlice";
 import { currentChatChanged, sessionIdChanged, userIdChanged } from "../reducers/profileSlice";
 
@@ -49,7 +49,11 @@ const messageFilter = (message) => {
         case constants.DELETE_USER_CHAT:
           store.dispatch(userDeleted(generalMessage.content.user));
           break;
-
+          
+        case constants.UPDATE_CHAT_USER:
+          store.dispatch(userUpdated(generalMessage.content));
+          break;
+        
         default:
           console.log(`MESSAGE TYPE NOT RECOGNIZED: ${generalMessage.messageType}`);
           break;

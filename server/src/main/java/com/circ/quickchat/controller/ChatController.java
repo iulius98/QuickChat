@@ -1,7 +1,8 @@
 package com.circ.quickchat.controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,7 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.circ.quickchat.entity.Chat;
@@ -48,11 +49,11 @@ public class ChatController {
 	}
 	
 	@PostMapping("/chat/create/{sessionId}")
-	public ChatDTO createNewChat(@PathVariable String sessionId, @RequestParam String name) {
-		Chat chat = Chat.builder().users(new HashSet<User>())
-				.name(name).build();
+	public ChatDTO createNewChat(@RequestBody  Chat chat, @PathVariable String sessionId) {
 		User userThatCreatedChat = userService.getUserBySessionId(sessionId);
-		Chat chatFromDb = chatService.save(chat);	
+		List<Long> usersThatWillBeAddedInChat = chat.getUsers().stream().map(usr -> usr.getId())
+				.collect(Collectors.toList());
+		Chat chatFromDb = userService.addUsersInChat(chat, usersThatWillBeAddedInChat);
 		chatFromDb.getUsers().add(userThatCreatedChat);
 //		userUtilCommun.sendToUser(sessionId, WebsocketMessage.builder().messageType(MessageType.REQUESTED_CHAT)
 //				.content(chatFromDb.toChatDTO()).build());

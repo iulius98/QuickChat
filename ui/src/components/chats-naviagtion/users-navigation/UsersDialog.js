@@ -58,11 +58,16 @@ export default function UsersDialog(props) {
     setChecked(newChecked);
   };
 
-  async function StartChat() {
+  function StartChat() {
     let chatId;
     const chatName = nanoid(20);
-    await axios
-      .post(serverHost + `/chat/create/${sessionId}?name=${chatName}`)
+    const chosenUsers = users.filter(user => checked.indexOf(user.id) !== -1)
+                             .map(user => { return {id: user.id} });
+    axios
+      .post(serverHost + `/chat/create/${sessionId}?name=${chatName}`, {
+        name: chatName,
+        users: chosenUsers
+      })
       .then(function (response) {
         chatId = response.data.id;
         console.log(chatId);
@@ -72,13 +77,13 @@ export default function UsersDialog(props) {
         console.log("ERROR!");
         console.log(error);
       });
-    users.forEach((user) => {
-      // console.log(user);
-      if (checked.indexOf(user.id) !== -1) {
-        // console.log(user.id);
-        wsClient.send(`/chat/addUser/${chatId}/${user.id}`, {}, {});
-      }
-    });
+    // users.forEach((user) => {
+    //   // console.log(user);
+    //   if (checked.indexOf(user.id) !== -1) {
+    //     // console.log(user.id);
+    //     wsClient.send(`/chat/addUser/${chatId}/${user.id}`, {}, {});
+    //   }
+    // });
   }
 
   const handleLookup = (text) => {

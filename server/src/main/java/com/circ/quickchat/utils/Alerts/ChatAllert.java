@@ -33,6 +33,18 @@ public class ChatAllert {
 		
 	}
 	
+	public void addUserInChatV2(Chat chat, User user) {
+		WebsocketMessage websocketMessage = WebsocketMessage.builder().content(UserAndChat.builder()
+				.user(user.toUserDTO()).chatId(chat.getId()).build()).messageType(MessageType.ADD_USER_CHAT).build();
+		
+		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream()
+				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(chat)).map(usr -> usr.getSessionId())
+				.collect(Collectors.toList()));
+		
+		sendChatToUser(chat.toChatDTO(), user.getSessionId());
+		
+	}
+	
 	public void deleteUserInChat(Chat chat, User user) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder()
 				.content(UserAndChat.builder().chatId(chat.getId()).user(user.toUserDTO()).build())

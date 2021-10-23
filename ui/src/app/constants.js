@@ -1,9 +1,6 @@
 // SERVER MESSAGE TYPES
 export const MESSAGE = "MESSAGE";
-export const UPGRADE_LIST_USERS = "UPGRADE_LIST_USERS";
-export const ADD_USER = "ADD_USER";
-export const DELETE_USER = "DELETE_USER";
-export const UPDATE_USER = "UPDATE_USER";
+export const UPDATE_CHAT_USER = "UPDATE_CHAT_USER";
 export const ADD_USER_CHAT = "ADD_USER_CHAT";
 export const DELETE_USER_CHAT = "DELETE_USER_CHAT";
 export const NEW_CHAT = "NEW_CHAT";
