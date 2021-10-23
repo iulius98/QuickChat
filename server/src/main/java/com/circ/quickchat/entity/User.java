@@ -2,12 +2,15 @@ package com.circ.quickchat.entity;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -44,7 +47,7 @@ public class User {
 	@JoinColumn(name = "photo_profile_id")
 	private Photo photo;
 	
-	@OneToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "current_chat_id")
 	@JsonIgnoreProperties({"users", "messages"})
 	private Chat currentChat;
@@ -58,14 +61,14 @@ public class User {
 				.name(this.name).build();
 	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (obj instanceof User) {
-//			User objUser = (User) obj;
-//			return this.id.equals(objUser.getId());
-//		}
-//		return false;
-//	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof User) {
+			User objUser = (User) obj;
+			return this.id.equals(objUser.getId());
+		}
+		return false;
+	}
 	
 	
 	

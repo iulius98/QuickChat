@@ -35,9 +35,10 @@ public class ChatAllert {
 	
 	public void deleteUserInChat(Chat chat, User user) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder()
-				.content(UserAndChat.builder().chatId(chat.getId()).user(user.toUserDTO()))
+				.content(UserAndChat.builder().chatId(chat.getId()).user(user.toUserDTO()).build())
 				.messageType(MessageType.DELETE_USER_CHAT).build();
-		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream().map(usr -> usr.getSessionId())
+		userUtilCommun.sendToUsers(websocketMessage, chat.getUsers().stream()
+				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(chat)).map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
 	}
 	

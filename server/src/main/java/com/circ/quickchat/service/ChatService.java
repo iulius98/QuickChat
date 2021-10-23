@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,10 @@ public class ChatService {
 	@Autowired
 	private ChatRepository chatRepository;
 	
+	@Autowired
+	private UserService userService;
+	
+	@Transactional
 	public void sendMessage(Message message, String sessionIdAuthor) {
 		Chat chat = chatRepository.findById(message.getChat().getId()).orElseThrow(() -> new InternalError(
 				"It doesn't exist a chat with id: " + message.getId()));
@@ -48,16 +54,25 @@ public class ChatService {
 	
 	public List<Chat> getChatThatContainsUser(User user) {
 		return chatRepository.findAll()
-				.stream().filter(chat -> chat.getUsers().contains(user))
+				.stream().filter(chat -> chat.getUsers().stream()
+						.anyMatch(usr -> usr.getId().equals(user.getId())))
 				.collect(Collectors.toList());
 	}
 	
 	public Chat getChatById(Long chatId) {
-		return chatRepository.findById(chatId).orElseThrow(() -> 
+		Chat chat = chatRepository.findById(chatId).orElseThrow(() -> 
 			new InternalError("Chat with id: " + chatId + " doesn't exist"));
+		chat.getMessages();
+		return chat;
 	}
 	
 	public void deleteChat(Chat chat) {
+		userService.saveAll(
+		chat.getUsers().stream()
+		.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(chat)).map(usr -> {
+			usr.setCurrentChat(null);
+			return usr;
+		}).collect(Collectors.toList()));
 		chatRepository.delete(chat);
 	}
 }

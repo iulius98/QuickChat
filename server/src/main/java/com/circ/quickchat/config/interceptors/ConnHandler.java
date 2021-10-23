@@ -3,7 +3,12 @@ package com.circ.quickchat.config.interceptors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Cache;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
@@ -25,36 +30,40 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 		super(delegate);
 	}
 
-	
 	@Autowired
 	private UserAllert userAlert;
-	
+
 	@Autowired
 	private ChatAllert chatAllert;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ChatService chatService;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		
-		  String sessionId = (String)session.getAttributes().get("sessionId").toString();
-		  User user = userService.getUserBySessionId(sessionId);
-		  List<Chat> chats = chatService.getChatThatContainsUser(user);
-		  if (chats != null) {
-			  chats.forEach(chat -> {
-				  if (chat.getUsers().size() == 1) {
-					  chatService.deleteChat(chat);
-				  } else {
-					  chat.getUsers().remove(user);
-					  chatService.save(chat);
-				  }
-			  });
-		  }
-		  userService.deleteUser(user);
+
+		String sessionId = (String) session.getAttributes().get("sessionId").toString();
+		User user = userService.getUserBySessionId(sessionId);
+		List<Chat> chats = chatService.getChatThatContainsUser(user);
+		if (chats != null) {
+			chats.forEach(chat -> {
+				if (chat.getUsers().size() == 1) {
+					chatService.deleteChat(chat);
+				} else {
+					chat.setUsers(chat.getUsers().stream().filter(usr -> !usr.getId().equals(user.getId()))
+							.collect(Collectors.toSet()));
+					chatAllert.deleteUserInChat(chat, user);
+					chatService.save(chat);
+				}
+			});
+		}
+		userService.deleteUser(user);
 	}
 
 //	@Override
@@ -78,7 +87,5 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 //		}).start();
 //
 //	}
-	
-	
 
 }

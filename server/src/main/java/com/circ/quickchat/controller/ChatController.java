@@ -70,6 +70,7 @@ public class ChatController {
 	}
 	
 	@MessageMapping("user/{sessionId}/chat/{chatId}")
+	@Transactional
 	public void getChat(@DestinationVariable String sessionId, @DestinationVariable Long chatId) {
 		Chat chat = chatService.getChatById(chatId);
 		User user = userService.getUserBySessionId(sessionId);

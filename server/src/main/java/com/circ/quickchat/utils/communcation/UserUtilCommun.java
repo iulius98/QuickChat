@@ -20,9 +20,11 @@ public class UserUtilCommun {
 	}
 	
 	public void sendToUsers(Object message, List<String> sessionsIds) {
-		sessionsIds.forEach(id -> {
-			send.convertAndSendToUser(id, "/usertell", message);
-		});
+		if (sessionsIds != null) {
+			sessionsIds.forEach(id -> {
+				send.convertAndSendToUser(id, "/usertell", message);
+			});
+		}
 	}
 
 }

@@ -44,11 +44,11 @@ const messageFilter = (message) => {
           break;
 
         case constants.ADD_USER_CHAT:
-          store.dispatch(userAdded(generalMessage.user));
+          store.dispatch(userAdded(generalMessage.content.user));
           break;
 
         case constants.DELETE_USER_CHAT:
-          store.dispatch(userDeleted(generalMessage.user));
+          store.dispatch(userDeleted(generalMessage.content.user));
           break;
 
         default:

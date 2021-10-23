@@ -1,5 +1,6 @@
 package com.circ.quickchat.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,12 +43,16 @@ public class UserService {
 	}
 
 	public void deleteUser(User user) {
-		userRepository.delete(user);
+		userRepository.deleteById(user.getId());
 	}
 
 	public List<UserDTO> getUsers(String sessionId) {
 		return userRepository.findAll().stream().filter(user -> !user.getSessionId().equals(sessionId))
 				.map(user -> user.toUserDTO()).collect(Collectors.toList());
+	}
+	
+	public void saveAll(Collection<User> users) {
+		userRepository.saveAll(users);
 	}
 
 }

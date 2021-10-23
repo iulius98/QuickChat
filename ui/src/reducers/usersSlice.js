@@ -13,6 +13,7 @@ const usersSlice = createSlice({
       state.push(action.payload);
     },
     userDeleted(state, action) {
+      console.log("AICI SUNT", action.payload);
       return state.filter((obj) => {
         return obj.id !== action.payload.id;
       });

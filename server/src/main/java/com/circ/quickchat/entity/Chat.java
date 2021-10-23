@@ -31,7 +31,7 @@ public class Chat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "users_to_chat",
 			joinColumns = @JoinColumn(name = "chat_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id")
@@ -41,8 +41,9 @@ public class Chat {
 	@Column(name = "name")
 	private String name;
 	
-	@OneToMany(mappedBy = "chat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Set<Message> messages;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "chat_id")
+	private List<Message> messages;
 	
 	public Chat() {
 		

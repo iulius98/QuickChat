@@ -2,6 +2,7 @@ package com.circ.quickchat.entity;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Message {
 	@JsonIgnoreProperties("messages")	
 	private Chat chat;
 	
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST,CascadeType.MERGE })
 	@JoinColumn(name = "author_id")
 	private User author;
 	
