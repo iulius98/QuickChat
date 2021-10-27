@@ -2,14 +2,7 @@ package com.circ.quickchat.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import DTO.ConversationDTO;
 import DTO.SimpleConversationDTO;
@@ -22,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @Entity
-@Table(name = "groups")
+@Table(name = "conversations")
 public class Conversation {
 	
 	@Id
@@ -44,7 +37,8 @@ public class Conversation {
 		ConversationInfo conversationInfoForCurrentUser = conversationsInfo.stream()
 				.filter(convInfo -> convInfo.getUserId().equals(userConvId)).findAny()
 				.orElseThrow(() -> new InternalError("This user isn't into covnersation"));
-		return ConversationDTO.builder().id(id).name(conversationInfoForCurrentUser.getName())
+		return ConversationDTO.builder().id(id).users(chat.getUsers())
+				.name(conversationInfoForCurrentUser.getName())
 				.messages(chat.getMessages()).build();
 	}
 	

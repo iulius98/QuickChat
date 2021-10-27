@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "conversation_info")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConversationInfo {
 	
 	@Id
@@ -28,4 +30,8 @@ public class ConversationInfo {
 	
 	@Column(name = "chat_name")
 	private String name;
+
+	public ConversationInfo() {
+
+	}
 }

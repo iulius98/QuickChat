@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.circ.quickchat.utils.Alerts.ChatAllert;
+import com.circ.quickchat.utils.communcation.UserUtilCommun;
+import com.circ.quickchat.websocket.WebsocketMessage;
+import constant.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.Conversation;
@@ -23,7 +25,9 @@ import com.circ.quickchat.service.UserService;
 import DTO.ConversationDTO;
 import DTO.SimpleConversationDTO;
 
-@RestController(value = "/group")
+import javax.transaction.Transactional;
+
+@RestController
 public class ConversationController {
 	
 	@Autowired
@@ -31,13 +35,19 @@ public class ConversationController {
 	
 	@Autowired 
 	private UserService userService;
+
+	@Autowired
+	private UserUtilCommun userUtilCommun;
+
+	@Autowired
+	private ChatAllert chatAllert;
 	
-	@PostMapping("/create/{sessionId}/{anotherUserId}")
+	@PostMapping("/conversations/create/{sessionId}/{anotherUserId}")
 	public SimpleConversationDTO createConversation(@RequestBody ConversationInfo conversationInfo, 
-			@PathVariable String sessiondId, @PathVariable Long anotherUserId) {
+			@PathVariable String sessionId, @PathVariable Long anotherUserId) {
 		Set<User> userSet = new HashSet<User>();
 		List<ConversationInfo> info = new ArrayList<ConversationInfo>();
-		User userThatCreatedConv = userService.getUserBySessionId(sessiondId);
+		User userThatCreatedConv = userService.getUserBySessionId(sessionId);
 		conversationInfo.setUserId(userThatCreatedConv.getId());
 		info.add(conversationInfo);
 		info.add(ConversationInfo.builder().name(userThatCreatedConv.getName()).userId(anotherUserId).build());
@@ -45,14 +55,21 @@ public class ConversationController {
 		User anotherUser = userService.getUserForId(anotherUserId);
 		userSet.add(anotherUser);
 		Chat newChat = Chat.builder().users(userSet).messages(new ArrayList<Message>()).build();
-		Conversation conversation = Conversation.builder().chat(newChat).conversationsInfo(info).build();
-		return conversationService.save(conversation).toSimpleConversationDTO(userThatCreatedConv.getId());
+		Conversation conversation = conversationService.save(Conversation.builder().chat(newChat)
+				.conversationsInfo(info).build());
+		chatAllert.addUserInConversation(conversation, anotherUser);
+		return conversation.toSimpleConversationDTO(userThatCreatedConv.getId());
 	}
 	
-	@GetMapping("/get/{convId}/{sessionId}")
-	public ConversationDTO getConversation(@PathVariable Long convId, @PathVariable String sessionId) {
-		return conversationService.findById(convId)
-				.toConversationDTO(userService.getUserBySessionId(sessionId).getId());
+	@MessageMapping("/conversations/get/{convId}/user/{sessionId}")
+	@Transactional
+	public void getConversation(@DestinationVariable Long convId, @DestinationVariable String sessionId) {
+		Conversation conversation =  conversationService.findById(convId);
+		User currentUser = userService.getUserBySessionId(sessionId);
+		currentUser.setCurrentChat(conversation.getChat());
+		userService.save(currentUser);
+		userUtilCommun.sendToUser(sessionId, WebsocketMessage.builder().messageType(MessageType.REQUESTED_CHAT)
+				.content(conversation.toConversationDTO(currentUser.getId())).build());
 	}
 	
 }

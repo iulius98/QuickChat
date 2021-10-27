@@ -7,27 +7,19 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 
-import { serverHost } from "../../../app/constants";
 import { WsClientContext } from "../../../app/WsClientContext";
-import axios from "axios";
+import { CONVERSATION } from "../../../app/constants";
 
 export default function ChatsList(props) {
   const chats = useSelector((state) => state.chats);
   const sessionId = useSelector((state) => state.profile.sessionId);
   const wsClient = React.useContext(WsClientContext);
 
-  const handleClickedItem = async (chatId) => {
-    console.log(chatId);
-    wsClient.send(`/user/${sessionId}/chat/${chatId}`, {}, {});
-    // axios
-    //   .get(serverHost + `/user/${sessionId}/chat/${chatId}`)
-    //   .then((response) => {
-    //     console.log(response);
-
-    //   })
-    //   .catch((error) => console.error(error));
+  const handleClickedItem = async (chatId, type) => {
+    console.log(chatId, type);
+    if (type === CONVERSATION) wsClient.send(`/conversations/get/${chatId}/user/${sessionId}`, {}, {});
+    else wsClient.send(`/groups/get/${chatId}/user/${sessionId}`, {}, {});
   };
 
   const renderChatsList = () => {
@@ -42,7 +34,7 @@ export default function ChatsList(props) {
           const labelId = `chat-list-label-${index}`;
           return (
             <ListItem key={chat.id} disablePadding>
-              <ListItemButton role={undefined} onClick={() => handleClickedItem(chat.id)} dense>
+              <ListItemButton role={undefined} onClick={() => handleClickedItem(chat.id, chat.type)} dense>
                 <ListItemText id={labelId} primary={<Typography variant="h5"> {chat.name} </Typography>} />
               </ListItemButton>
             </ListItem>

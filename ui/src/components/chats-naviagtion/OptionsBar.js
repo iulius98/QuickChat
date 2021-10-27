@@ -8,11 +8,10 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import UsersDialog from "./users-navigation/UsersDialog";
 
-import { useSelector } from "react-redux";
-
 export default function OptionsBar(props) {
   const [contextMenu, setContextMenu] = React.useState(null);
   const [openUserDialog, setOpenUsersDialog] = React.useState(false);
+  const [chosenOption, setChosenOption] = React.useState(null);
 
   const handleContextMenu = (event) => {
     event.preventDefault();
@@ -39,6 +38,7 @@ export default function OptionsBar(props) {
 
   const startChat = (event) => {
     console.log(event.target.id);
+    setChosenOption(event.target.id);
     setOpenUsersDialog(true);
   };
 
@@ -86,7 +86,10 @@ export default function OptionsBar(props) {
           </MenuItem>
         </Menu>
       </IconButton>
-      <UsersDialog openDialog={openUserDialog} setOpen={setOpenUsersDialog} />
+      <UsersDialog
+        open={{ value: openUserDialog, setter: setOpenUsersDialog }}
+        option={{ value: chosenOption, setter: setChosenOption }}
+      />
     </div>
   );
 }

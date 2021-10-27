@@ -3,6 +3,8 @@ package com.circ.quickchat.config.interceptors;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.circ.quickchat.entity.Conversation;
+import com.circ.quickchat.service.ConversationService;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
@@ -38,12 +40,16 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private ConversationService conversationService;
+
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 
 		String sessionId = (String) session.getAttributes().get("sessionId").toString();
 		User user = userService.getUserBySessionId(sessionId);
 		List<Group> groups = groupService.getChatThatContainsUser(user);
+		List<Conversation> conversations = conversationService.getChatThatContainsUser(user);
 		if (groups != null) {
 			groups.forEach(group -> {
 				if (group.getChat().getUsers().size() == 1) {
@@ -53,6 +59,18 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 							.collect(Collectors.toSet()));
 					chatAllert.deleteUserInChat(group, user);
 					groupService.save(group);
+				}
+			});
+		}
+		if (conversations != null) {
+			conversations.forEach(conversation -> {
+				if (conversation.getChat().getUsers().size() == 1) {
+					conversationService.delete(conversation);
+				} else {
+					conversation.getChat().setUsers(conversation.getChat().getUsers().stream().filter(usr -> !usr.getId().equals(user.getId()))
+							.collect(Collectors.toSet()));
+					chatAllert.deleteUserInChat(conversation, user);
+					conversationService.save(conversation);
 				}
 			});
 		}
@@ -75,7 +93,7 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 //					e.printStackTrace();
 //				}
 //				//userAlert.sendUserListTo(sessionId);
-//				chatAllert.sendChatToUser(chats.get(ChatConstants.principalChatId), sessionId);
+//				chatAllert.sendChatToUser(chats.get(ChatTypes.principalChatId), sessionId);
 //			}
 //		}).start();
 //

@@ -48,7 +48,7 @@ public class GroupController {
 		groupService.sendMessage(message, sessionId);
 	}
 	
-	@PostMapping("/chat/create/{sessionId}")
+	@PostMapping("/groups/create/{sessionId}")
 	public SimpleGroupDTO createNewGroup(@RequestBody  Group group, @PathVariable String sessionId) {
 		User userThatCreatedChat = userService.getUserBySessionId(sessionId);
 		List<Long> usersThatWillBeAddedInChat = group.getChat().getUsers().stream().map(usr -> usr.getId())
@@ -60,10 +60,10 @@ public class GroupController {
 		return groupService.save(groupFromDb).toSimpleGroupDTO();
 	}
 	
-	@MessageMapping("/chat/addUser/{chatId}/{userId}")
-	public void addUserInChat(@DestinationVariable Long chatId, @DestinationVariable Long userId,
+	@MessageMapping("/groups/addUser/{groupId}/{userId}")
+	public void addUserInChat(@DestinationVariable Long groupId, @DestinationVariable Long userId,
 			SimpMessageHeaderAccessor  headerAccessor) {
-		Group group = groupService.getGroupById(chatId);
+		Group group = groupService.getGroupById(groupId);
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
 		User user = userService.getUserBySessionId(sessionId);
 		if (!group.getChat().getUsers().stream().anyMatch(usr -> usr.getId().equals(user.getId()))) {
@@ -72,7 +72,7 @@ public class GroupController {
 		userService.addUserInChat(group, userId);
 	}
 	
-	@MessageMapping("user/{sessionId}/chat/{groupId}")
+	@MessageMapping("/groups/get/{groupId}/user/{sessionId}")
 	@Transactional
 	public void getGroup(@DestinationVariable String sessionId, @DestinationVariable Long groupId) {
 		Group group = groupService.getGroupById(groupId);

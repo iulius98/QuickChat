@@ -1,7 +1,6 @@
 package com.circ.quickchat.config.interceptors;
 
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpUtils;
 
@@ -12,11 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import com.circ.quickchat.entity.User;
 import com.circ.quickchat.service.UserService;
-import com.circ.quickchat.utils.Alerts.UserAllert;
-
-import constant.ChatConstants;
 
 @Component
 public class NewConnInterceptor implements HandshakeInterceptor{
@@ -53,7 +48,7 @@ public class NewConnInterceptor implements HandshakeInterceptor{
 //		sessionKeyToUser.get(sessionId).setId(UUID.randomUUID().toString());
 //		User newUser = sessionKeyToUser.get(sessionId);
 //		userAlert.connectNewUser(newUser);
-//		userService.addUserInChat(chats.get(ChatConstants.principalChatId), newUser.getId());
+//		userService.addUserInChat(chats.get(ChatTypes.principalChatId), newUser.getId());
 //	}
 
 }

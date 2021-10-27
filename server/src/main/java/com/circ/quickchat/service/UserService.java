@@ -28,6 +28,9 @@ public class UserService {
 	@Autowired
 	private ChatAllert chatAllert;
 
+	@Autowired
+	private ConversationInfoService chaConversationInfoService;
+
 	public void addUserInChat(Group chat, Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new InternalError("It doesn't exist an user with" + " the id: " + userId));
@@ -57,6 +60,7 @@ public class UserService {
 	}
 
 	public void deleteUser(User user) {
+		chaConversationInfoService.deleteAll(chaConversationInfoService.findAllByUserId(user.getId()));
 		userRepository.deleteById(user.getId());
 	}
 

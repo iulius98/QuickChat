@@ -32,6 +32,7 @@ const messageFilter = (message) => {
             chatAdded({
               id: generalMessage.content.id,
               name: generalMessage.content.name,
+              type: generalMessage.content.type,
             })
           );
           break;
@@ -49,11 +50,11 @@ const messageFilter = (message) => {
         case constants.DELETE_USER_CHAT:
           store.dispatch(userDeleted(generalMessage.content.user));
           break;
-          
+
         case constants.UPDATE_CHAT_USER:
           store.dispatch(userUpdated(generalMessage.content));
           break;
-        
+
         default:
           console.log(`MESSAGE TYPE NOT RECOGNIZED: ${generalMessage.messageType}`);
           break;

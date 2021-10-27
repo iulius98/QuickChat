@@ -3,6 +3,7 @@ package com.circ.quickchat.utils.Alerts;
 
 import java.util.stream.Collectors;
 
+import com.circ.quickchat.entity.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,13 +45,34 @@ public class ChatAllert {
 		sendChatToUser(group.toSimpleGroupDTO(), user.getSessionId());
 		
 	}
-	
+
+	public void addUserInConversation(Conversation conversation, User user) {
+		WebsocketMessage websocketMessage = WebsocketMessage.builder().content(UserAndChat.builder()
+				.user(user.toUserDTO()).chatId(conversation.getId()).build()).messageType(MessageType.ADD_USER_CHAT).build();
+
+/*		userUtilCommun.sendToUsers(websocketMessage, conversation.getChat().getUsers().stream()
+				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(conversation.getChat())).map(usr -> usr.getSessionId())
+				.collect(Collectors.toList()));*/
+
+		sendChatToUser(conversation.toSimpleConversationDTO(user.getId()), user.getSessionId());
+
+	}
+
 	public void deleteUserInChat(Group group, User user) {
 		WebsocketMessage websocketMessage = WebsocketMessage.builder()
 				.content(UserAndChat.builder().chatId(group.getId()).user(user.toUserDTO()).build())
 				.messageType(MessageType.DELETE_USER_CHAT).build();
 		userUtilCommun.sendToUsers(websocketMessage, group.getChat().getUsers().stream()
 				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(group.getChat())).map(usr -> usr.getSessionId())
+				.collect(Collectors.toList()));
+	}
+
+	public void deleteUserInChat(Conversation conversation, User user) {
+		WebsocketMessage websocketMessage = WebsocketMessage.builder()
+				.content(UserAndChat.builder().chatId(conversation.getId()).user(user.toUserDTO()).build())
+				.messageType(MessageType.DELETE_USER_CHAT).build();
+		userUtilCommun.sendToUsers(websocketMessage, conversation.getChat().getUsers().stream()
+				.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(conversation.getChat())).map(usr -> usr.getSessionId())
 				.collect(Collectors.toList()));
 	}
 	

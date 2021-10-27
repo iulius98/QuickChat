@@ -37,13 +37,13 @@ public class GroupService {
 	
 	@Transactional
 	public void sendMessage(Message message, String sessionIdAuthor) {
-		Group group = groupRepository.findById(message.getChat().getId()).orElseThrow(() -> new InternalError(
+		Chat chat = chatRepository.findById(message.getChat().getId()).orElseThrow(() -> new InternalError(
 				"It doesn't exist a chat with id: " + message.getId()));
-		group.getChat().getMessages().add(message);
-		groupRepository.save(group);
+		chat.getMessages().add(message);
+		chatRepository.save(chat);
 		List<String> usersFromChatWithoutAuthor = new ArrayList<String>();
-		group.getChat().getUsers().forEach(user -> {
-			if(user.getCurrentChat() != null && user.getCurrentChat().getId().equals(group.getId()) &&
+		chat.getUsers().forEach(user -> {
+			if(user.getCurrentChat() != null && user.getCurrentChat().getId().equals(chat.getId()) &&
 					!user.getSessionId().equals(sessionIdAuthor)) {
 				usersFromChatWithoutAuthor.add(user.getSessionId());
 			}

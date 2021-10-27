@@ -9,7 +9,6 @@ import { Button, InputAdornment, OutlinedInput, Typography } from "@mui/material
 import SearchIcon from "@mui/icons-material/Search";
 
 import UsersListCheck from "./UsersListCheck";
-import { WsClientContext } from "../../../app/WsClientContext";
 
 import { chatAdded } from "../../../reducers/chatsSlice";
 import { useSelector } from "react-redux";
@@ -17,20 +16,20 @@ import { useDispatch } from "react-redux";
 
 import axios from "axios";
 
-import { serverHost } from "../../../app/constants";
+import { serverHost, GROUP, CONVERSATION } from "../../../app/constants";
 import { nanoid } from "@reduxjs/toolkit";
 
 export default function UsersDialog(props) {
   const [lookupText, setLookupText] = React.useState("");
   const [checked, setChecked] = React.useState([]);
   const [users, setUsers] = React.useState([]);
-  const wsClient = React.useContext(WsClientContext);
   const sessionId = useSelector((state) => state.profile.sessionId);
 
   const dispatch = useDispatch();
 
   const getUsersList = () => {
-    if (props.openDialog) {
+    console.log(props.open.value);
+    if (props.open.value) {
       console.log("Get Users");
       axios
         .get(serverHost + `/users/${sessionId}`)
@@ -39,12 +38,12 @@ export default function UsersDialog(props) {
           setUsers(response.data);
         })
         .catch(function (error) {
-          console.log(error);
+          console.error(error);
         });
     }
   };
 
-  React.useEffect(getUsersList, [props.openDialog, sessionId]);
+  React.useEffect(getUsersList, [props.open.value, sessionId]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -58,51 +57,69 @@ export default function UsersDialog(props) {
     setChecked(newChecked);
   };
 
-  function StartChat() {
-    let chatId;
-    const chatName = nanoid(20);
-    const chosenUsers = users.filter(user => checked.indexOf(user.id) !== -1)
-                             .map(user => { return {id: user.id} });
+  const makeCreateRequest = (path, name, partners, type) => {
+    console.log(path, name, partners);
     axios
-      .post(serverHost + `/chat/create/${sessionId}`, {
-        name: chatName,
-        chat: {users: chosenUsers}
+      .post(path, {
+        name: name,
+        chat: { users: partners },
       })
       .then(function (response) {
-        chatId = response.data.id;
+        const chatId = response.data.id;
         console.log(chatId);
-        dispatch(chatAdded({ id: chatId, name: chatName }));
+        dispatch(chatAdded({ id: chatId, name: name, type: type }));
       })
       .catch(function (error) {
-        console.log("ERROR!");
-        console.log(error);
+        console.error(error);
       });
-    // users.forEach((user) => {
-    //   // console.log(user);
-    //   if (checked.indexOf(user.id) !== -1) {
-    //     // console.log(user.id);
-    //     wsClient.send(`/chat/addUser/${chatId}/${user.id}`, {}, {});
-    //   }
-    // });
-  }
+  };
+
+  const startChat = () => {
+    let path = serverHost;
+    let chatName;
+    let type;
+    let partners = null;
+    switch (props.option.value) {
+      case "conversation":
+        type = CONVERSATION;
+        path += `/conversations/create/${sessionId}/${checked[0]}`;
+        chatName = users.find((user) => user.id === checked[0]).name;
+        console.log(chatName);
+        break;
+      case "group":
+        type = GROUP;
+        path += `/groups/create/${sessionId}`;
+        partners = users
+          .filter((user) => checked.indexOf(user.id) !== -1)
+          .map((user) => {
+            return { id: user.id };
+          });
+        chatName = nanoid(20);
+        break;
+      default:
+        console.log(props.option.value);
+        break;
+    }
+    makeCreateRequest(path, chatName, partners, type);
+  };
 
   const handleLookup = (text) => {
     setLookupText(text);
   };
 
   const handleClose = () => {
-    props.setOpen(false);
+    props.open.setter(false);
+    props.option.setter(null);
     setChecked([]);
     setUsers([]);
   };
 
   const handleStart = () => {
-    StartChat();
-    // handleClose();
+    startChat();
   };
 
   return (
-    <Dialog open={props.openDialog} onClose={handleClose}>
+    <Dialog open={props.open.value} onClose={handleClose}>
       <DialogTitle> Start a chat </DialogTitle>
 
       <DialogContent>
