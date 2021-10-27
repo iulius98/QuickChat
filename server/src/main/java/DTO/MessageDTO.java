@@ -1,5 +1,7 @@
 package DTO;
 
+import java.sql.Timestamp;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +14,5 @@ public class MessageDTO {
 	private Long authorId;
 	private String authorName;
 	private String content;
-	private Long createdAt;
+	private Timestamp createdAt;
 }

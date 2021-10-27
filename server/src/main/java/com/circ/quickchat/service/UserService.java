@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.circ.quickchat.entity.Chat;
+import com.circ.quickchat.entity.Group;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.repositories.UserRepository;
 import com.circ.quickchat.utils.Alerts.ChatAllert;
@@ -23,28 +23,28 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private ChatService chatService;
+	private GroupService groupService;
 
 	@Autowired
 	private ChatAllert chatAllert;
 
-	public void addUserInChat(Chat chat, Long userId) {
+	public void addUserInChat(Group chat, Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new InternalError("It doesn't exist an user with" + " the id: " + userId));
 		chatAllert.addUserInChat(chat, user);
-		chatService.save(chat);
+		groupService.save(chat);
 	}
 	
-	public Chat addUsersInChat(Chat chat, List<Long> usersId) {
-		chat.setUsers(new HashSet<User>());
-		Chat temporaryChatDb = chatService.save(chat);
+	public Group addUsersInChat(Group group, List<Long> usersId) {
+		group.getChat().setUsers(new HashSet<User>());
+		Group temporaryGroupDb = groupService.save(group);
 		Set<User> users = getAllForIds(usersId);
-		temporaryChatDb.setUsers(users);
-		temporaryChatDb = chatService.save(temporaryChatDb);
+		temporaryGroupDb.getChat().setUsers(users);
+		temporaryGroupDb = groupService.save(temporaryGroupDb);
 		users.forEach(usr -> {
-			chatAllert.addUserInChatV2(chat, usr);
+			chatAllert.addUserInChatV2(group, usr);
 		});
-		return chatService.save(chat);
+		return groupService.save(group);
 	}
 
 	public User getUserBySessionId(String sessionId) {
@@ -72,6 +72,10 @@ public class UserService {
 	public Set<User> getAllForIds(List<Long> ids) {
 		return userRepository.findAllById(ids).stream()
 				.collect(Collectors.toSet());
+	}
+	
+	public User getUserForId(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new InternalError("Doesn exist an user with thid id!"));
 	}
 
 }

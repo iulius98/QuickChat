@@ -41,7 +41,7 @@ public class User {
 	private String name;
 	
 	@Column(name = "created_at")
-	private Long createdAt;
+	private Timestamp createdAt;
 	
 	@OneToOne
 	@JoinColumn(name = "photo_profile_id")

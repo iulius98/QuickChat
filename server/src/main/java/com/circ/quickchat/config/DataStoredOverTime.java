@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.Message;
 import com.circ.quickchat.entity.User;
 

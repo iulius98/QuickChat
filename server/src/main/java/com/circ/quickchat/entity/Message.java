@@ -45,7 +45,7 @@ public class Message {
 	private String authorName;
 	
 	@Column(name = "created_at")
-	private Long createdAt;
+	private Timestamp createdAt;
 	
 	@Column(name = "content")
 	private String content;

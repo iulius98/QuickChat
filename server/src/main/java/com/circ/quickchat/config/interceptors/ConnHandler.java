@@ -1,13 +1,8 @@
 package com.circ.quickchat.config.interceptors;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
-import org.hibernate.Cache;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
@@ -15,14 +10,12 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 
-import com.circ.quickchat.entity.Chat;
+import com.circ.quickchat.entity.Group;
 import com.circ.quickchat.entity.User;
-import com.circ.quickchat.service.ChatService;
+import com.circ.quickchat.service.GroupService;
 import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.Alerts.ChatAllert;
 import com.circ.quickchat.utils.Alerts.UserAllert;
-
-import constant.ChatConstants;
 
 public class ConnHandler extends WebSocketHandlerDecorator {
 
@@ -40,7 +33,7 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 	private UserService userService;
 
 	@Autowired
-	private ChatService chatService;
+	private GroupService groupService;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -50,16 +43,16 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 
 		String sessionId = (String) session.getAttributes().get("sessionId").toString();
 		User user = userService.getUserBySessionId(sessionId);
-		List<Chat> chats = chatService.getChatThatContainsUser(user);
-		if (chats != null) {
-			chats.forEach(chat -> {
-				if (chat.getUsers().size() == 1) {
-					chatService.deleteChat(chat);
+		List<Group> groups = groupService.getChatThatContainsUser(user);
+		if (groups != null) {
+			groups.forEach(group -> {
+				if (group.getChat().getUsers().size() == 1) {
+					groupService.deleteGroup(group);
 				} else {
-					chat.setUsers(chat.getUsers().stream().filter(usr -> !usr.getId().equals(user.getId()))
+					group.getChat().setUsers(group.getChat().getUsers().stream().filter(usr -> !usr.getId().equals(user.getId()))
 							.collect(Collectors.toSet()));
-					chatAllert.deleteUserInChat(chat, user);
-					chatService.save(chat);
+					chatAllert.deleteUserInChat(group, user);
+					groupService.save(group);
 				}
 			});
 		}

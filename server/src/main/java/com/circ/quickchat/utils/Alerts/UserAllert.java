@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.circ.quickchat.entity.Chat;
+import com.circ.quickchat.entity.Group;
 import com.circ.quickchat.entity.User;
-import com.circ.quickchat.service.ChatService;
+import com.circ.quickchat.service.GroupService;
 import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
 import com.circ.quickchat.websocket.UserAndChat;
@@ -28,13 +28,13 @@ public class UserAllert {
 	private UserUtilCommun userUtilCommun;
 	
 	@Autowired
-	private ChatService chatService;
+	private GroupService groupService;
 	
 	public void updateUser(User user) {
-		List<Chat> chats = chatService.getChatThatContainsUser(user);
-		List<String> listUserSessionsId = chats.stream().flatMap(chat -> {
-			Stream<String> usersThatUseCurrentChatNow = chat.getUsers().stream()
-				.filter(userC -> userC.getCurrentChat() != null && userC.getCurrentChat().equals(chat))
+		List<Group> groups = groupService.getChatThatContainsUser(user);
+		List<String> listUserSessionsId = groups.stream().flatMap(group -> {
+			Stream<String> usersThatUseCurrentChatNow = group.getChat().getUsers().stream()
+				.filter(userC -> userC.getCurrentChat() != null && userC.getCurrentChat().equals(group.getChat()))
 				.map(userC -> userC.getSessionId());
 			return usersThatUseCurrentChatNow;
 		}).collect(Collectors.toList());

@@ -1,51 +1,75 @@
-CREATE TABLE users (
+CREATE TABLE "users" (
   "id" serial PRIMARY KEY,
   "name" varchar(20),
-  "created_at" bigint,
+  "created_at" timestamp,
   "photo_profile_id" bigint,
   "session_id" varchar(120),
   "current_chat_id" bigint
 );
 
-CREATE TABLE photo (
+CREATE TABLE "photos" (
   "id" serial PRIMARY KEY,
   "big_photo_uri" varchar(120),
   "jpeg_photo_uri" varchar(120)
 );
 
-CREATE TABLE chats (
+CREATE TABLE "messages" (
   "id" serial PRIMARY KEY,
-  "photo_id" bigint,
-  "name" varchar(20),
-  "chat_type" varchar(20),
-  "created_at" bigint
-);
-
-CREATE TABLE messages (
-  "id" serial PRIMARY KEY,
-  "author_id" bigint,
   "author_name" varchar(20),
-  "chat_id" int,
+  "author_id" bigint,
+  "chat_id" bigint,
   "status" varchar(20),
   "content" varchar(10000),
-  "created_at" bigint
+  "created_at" timestamp
 );
 
-CREATE TABLE users_to_chat (
+CREATE TABLE "chats" (
+  "id" serial PRIMARY KEY,
+  "is_secure" boolean,
+  "created_at" timestamp
+);
+
+CREATE TABLE "groups" (
+  "id" bigint PRIMARY KEY,
+  "group_photo_id" bigint,
+  "group_name" varchar(25)
+);
+
+CREATE TABLE "conversations" (
+  "id" bigint PRIMARY KEY
+);
+
+CREATE TABLE "conversation_info" (
+  "id" serial PRIMARY KEY,
   "user_id" bigint,
-  "chat_id" bigint,
-  PRIMARY KEY(user_id, chat_id)
+  "conversation_id" bigint,
+  "user_photo_id" bigint,
+  "chat_name" varchar(20)
 );
 
-ALTER TABLE users ADD FOREIGN KEY ("photo_profile_id") REFERENCES photo ("id");
+CREATE TABLE "users_to_chat" (
+  "id" serial PRIMARY KEY,
+  "user_id" bigint,
+  "chat_id" bigint
+);
 
--- ALTER TABLE users ADD FOREIGN KEY ("current_chat_id") REFERENCES chats ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("photo_profile_id") REFERENCES "photos" ("id");
 
-ALTER TABLE chats ADD FOREIGN KEY ("photo_id") REFERENCES photo ("id");
+ALTER TABLE "messages" ADD FOREIGN KEY ("chat_id") REFERENCES "chats" ("id");
 
-ALTER TABLE messages ADD FOREIGN KEY ("chat_id") REFERENCES chats ("id");
+ALTER TABLE "groups" ADD FOREIGN KEY ("id") REFERENCES "chats" ("id");
 
---ALTER TABLE messages ADD FOREIGN KEY ("author_id") REFERENCES users ("id");
+ALTER TABLE "groups" ADD FOREIGN KEY ("group_photo_id") REFERENCES "photos" ("id");
+
+ALTER TABLE "conversations" ADD FOREIGN KEY ("id") REFERENCES "chats" ("id");
+
+ALTER TABLE "conversation_info" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "conversation_info" ADD FOREIGN KEY ("conversation_id") REFERENCES "conversations" ("id");
+
+ALTER TABLE "conversation_info" ADD FOREIGN KEY ("user_photo_id") REFERENCES "photos" ("id");
+
+ALTER TABLE "users_to_chat" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON ALL TABLES IN SCHEMA public 

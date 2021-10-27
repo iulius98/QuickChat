@@ -64,9 +64,9 @@ export default function UsersDialog(props) {
     const chosenUsers = users.filter(user => checked.indexOf(user.id) !== -1)
                              .map(user => { return {id: user.id} });
     axios
-      .post(serverHost + `/chat/create/${sessionId}?name=${chatName}`, {
+      .post(serverHost + `/chat/create/${sessionId}`, {
         name: chatName,
-        users: chosenUsers
+        chat: {users: chosenUsers}
       })
       .then(function (response) {
         chatId = response.data.id;

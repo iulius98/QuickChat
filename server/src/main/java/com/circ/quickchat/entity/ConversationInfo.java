@@ -5,30 +5,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.Table;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Setter
 @Getter
+@Setter
 @SuperBuilder
 @Entity
-@Table(name = "photos")
-public class Photo {
+@Table(name = "conversation_info")
+public class ConversationInfo {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    private Long id;
 	
-	@Column(name = "big_photo_uri")
-	private String bigPhotoUri;
+	@Column(name = "user_id")
+	private Long userId;
 	
-	@Column(name = "jpeg_photo_uri")
-	private String jpegPhotoUri;
-	
-	public Photo() {
-		
-	}
+	@Column(name = "chat_name")
+	private String name;
 }

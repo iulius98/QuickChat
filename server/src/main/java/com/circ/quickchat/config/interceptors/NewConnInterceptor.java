@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import com.circ.quickchat.entity.Chat;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.Alerts.UserAllert;

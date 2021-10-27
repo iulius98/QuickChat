@@ -10,19 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.circ.quickchat.entity.Chat;
+import com.circ.quickchat.entity.Group;
 import com.circ.quickchat.entity.Message;
 import com.circ.quickchat.entity.User;
 import com.circ.quickchat.repositories.ChatRepository;
+import com.circ.quickchat.repositories.GroupRepository;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
 import com.circ.quickchat.websocket.WebsocketMessage;
 
 import constant.MessageType;
 
 @Service
-public class ChatService {
+public class GroupService {
 	
 	@Autowired
 	private UserUtilCommun userUtilCommun;
+	
+	@Autowired
+	private GroupRepository groupRepository;
 	
 	@Autowired
 	private ChatRepository chatRepository;
@@ -32,13 +37,13 @@ public class ChatService {
 	
 	@Transactional
 	public void sendMessage(Message message, String sessionIdAuthor) {
-		Chat chat = chatRepository.findById(message.getChat().getId()).orElseThrow(() -> new InternalError(
+		Group group = groupRepository.findById(message.getChat().getId()).orElseThrow(() -> new InternalError(
 				"It doesn't exist a chat with id: " + message.getId()));
-		chat.getMessages().add(message);
-		chatRepository.save(chat);
+		group.getChat().getMessages().add(message);
+		groupRepository.save(group);
 		List<String> usersFromChatWithoutAuthor = new ArrayList<String>();
-		chat.getUsers().forEach(user -> {
-			if(user.getCurrentChat() != null && user.getCurrentChat().getId().equals(chat.getId()) &&
+		group.getChat().getUsers().forEach(user -> {
+			if(user.getCurrentChat() != null && user.getCurrentChat().getId().equals(group.getId()) &&
 					!user.getSessionId().equals(sessionIdAuthor)) {
 				usersFromChatWithoutAuthor.add(user.getSessionId());
 			}
@@ -48,31 +53,36 @@ public class ChatService {
 		userUtilCommun.sendToUsers(websocketMessage, usersFromChatWithoutAuthor);
 	}
 	
-	public Chat save(Chat chat) {
-		return chatRepository.save(chat);
+	public Group save(Group group) {
+		Chat chat  = group.getChat();
+		Chat chatDB = chatRepository.save(chat);
+		group.setChat(chatDB);
+		group.setId(chatDB.getId());
+		return groupRepository.save(group);
 	}
 	
-	public List<Chat> getChatThatContainsUser(User user) {
-		return chatRepository.findAll()
-				.stream().filter(chat -> chat.getUsers().stream()
+	public List<Group> getChatThatContainsUser(User user) {
+		return groupRepository.findAll()
+				.stream().filter(group -> group.getChat().getUsers().stream()
 						.anyMatch(usr -> usr.getId().equals(user.getId())))
 				.collect(Collectors.toList());
 	}
 	
-	public Chat getChatById(Long chatId) {
-		Chat chat = chatRepository.findById(chatId).orElseThrow(() -> 
-			new InternalError("Chat with id: " + chatId + " doesn't exist"));
-		chat.getMessages();
-		return chat;
+	public Group getGroupById(Long groupId) {
+		Group group = groupRepository.findById(groupId).orElseThrow(() -> 
+			new InternalError("Group with id: " + groupId + " doesn't exist"));
+		group.getChat().getMessages();
+		return group;
 	}
 	
-	public void deleteChat(Chat chat) {
+	public void deleteGroup(Group group) {
 		userService.saveAll(
-		chat.getUsers().stream()
-		.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(chat)).map(usr -> {
+		group.getChat().getUsers().stream()
+		.filter(usr -> usr.getCurrentChat() != null && usr.getCurrentChat().equals(group.getChat())).map(usr -> {
 			usr.setCurrentChat(null);
 			return usr;
 		}).collect(Collectors.toList()));
-		chatRepository.delete(chat);
+		groupRepository.delete(group);
+		//chatRepository.delete(group.getChat());
 	}
 }
