@@ -53,8 +53,8 @@ public class WriterController {
 		WebsocketMessage messageWebsocketMessage = WebsocketMessage.builder().messageType(messageType)
 				.content(userThatWrite.toUserDTO()).build();
 		userUtilCommun.sendToUsers(messageWebsocketMessage, chat.getUsers()
-				.stream().filter(usr -> !usr.getSessionId().equals(sessionId))
-				.map(usr -> usr.getSessionId()).collect(Collectors.toList()));
+				.stream().filter(usr -> !usr.getSessionId().equals(sessionId) && usr.getCurrentChat() != null
+				&& usr.getCurrentChat().equals(chat)).map(usr -> usr.getSessionId()).collect(Collectors.toList()));
 	}
 
 }
