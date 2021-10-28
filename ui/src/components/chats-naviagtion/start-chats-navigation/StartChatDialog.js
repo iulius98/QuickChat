@@ -19,7 +19,7 @@ import axios from "axios";
 import { serverHost, GROUP, CONVERSATION } from "../../../app/constants";
 import { nanoid } from "@reduxjs/toolkit";
 
-export default function UsersDialog(props) {
+export default function StartChatDialog(props) {
   const [lookupText, setLookupText] = React.useState("");
   const [checked, setChecked] = React.useState([]);
   const [users, setUsers] = React.useState([]);
@@ -46,19 +46,22 @@ export default function UsersDialog(props) {
   React.useEffect(getUsersList, [props.open.value, sessionId]);
 
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
+    if (props.option.value === "conversation") {
+      if (checked[0] !== value) setChecked([value]);
     } else {
-      newChecked.splice(currentIndex, 1);
+      const currentIndex = checked.indexOf(value);
+      const newChecked = [...checked];
+
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+      setChecked(newChecked);
     }
-    setChecked(newChecked);
   };
 
   const makeCreateRequest = (path, name, partners, type) => {
-    console.log(path, name, partners);
     axios
       .post(path, {
         name: name,

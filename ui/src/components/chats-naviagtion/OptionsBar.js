@@ -6,11 +6,11 @@ import MenuItem from "@mui/material/MenuItem";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 
-import UsersDialog from "./users-navigation/UsersDialog";
+import StartChatDialog from "./start-chats-navigation/StartChatDialog";
 
 export default function OptionsBar(props) {
   const [contextMenu, setContextMenu] = React.useState(null);
-  const [openUserDialog, setOpenUsersDialog] = React.useState(false);
+  const [openStartChatDialog, setOpenStartChatDialog] = React.useState(false);
   const [chosenOption, setChosenOption] = React.useState(null);
 
   const handleContextMenu = (event) => {
@@ -39,7 +39,7 @@ export default function OptionsBar(props) {
   const startChat = (event) => {
     console.log(event.target.id);
     setChosenOption(event.target.id);
-    setOpenUsersDialog(true);
+    setOpenStartChatDialog(true);
   };
 
   return (
@@ -86,8 +86,8 @@ export default function OptionsBar(props) {
           </MenuItem>
         </Menu>
       </IconButton>
-      <UsersDialog
-        open={{ value: openUserDialog, setter: setOpenUsersDialog }}
+      <StartChatDialog
+        open={{ value: openStartChatDialog, setter: setOpenStartChatDialog }}
         option={{ value: chosenOption, setter: setChosenOption }}
       />
     </div>
