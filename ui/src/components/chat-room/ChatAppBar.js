@@ -14,7 +14,9 @@ export default function ChatAppBar() {
   return (
     <Box sx={{ backgroundColor: "info.main", margin: 0, height: "100%" }}>
       <Typography variant="h5">{chat.name}</Typography>
-      <Typography variant="body1"> {users.map((user) => user.name).join(", ")} </Typography>
+      <Typography variant="body1">
+        {users.map((user) => (user.isWriting ? `${user.name} is typing` : user.name)).join(", ")}
+      </Typography>
     </Box>
   );
 }

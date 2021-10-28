@@ -18,17 +18,15 @@ const usersSlice = createSlice({
         return obj.id !== action.payload.id;
       });
     },
-    userUpdated(state, action) {
-      return state.map((obj) =>
-        obj.id === action.payload.id
-          ? { ...obj, name: action.payload.name }
-          : obj
-      );
+    usernameUpdated(state, action) {
+      return state.map((obj) => (obj.id === action.payload.id ? { ...obj, name: action.payload.name } : obj));
+    },
+    currentyWritingUpdated(state, action) {
+      return state.map((obj) => (obj.id === action.payload.id ? { ...obj, isWriting: action.payload.isWriting } : obj));
     },
   },
 });
 
-export const { usersListUpdated, userAdded, userDeleted, userUpdated } =
-  usersSlice.actions;
+export const { usersListUpdated, userAdded, userDeleted, usernameUpdated, currentyWritingUpdated } = usersSlice.actions;
 
 export default usersSlice.reducer;

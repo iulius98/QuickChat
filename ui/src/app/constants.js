@@ -5,6 +5,8 @@ export const ADD_USER_CHAT = "ADD_USER_CHAT";
 export const DELETE_USER_CHAT = "DELETE_USER_CHAT";
 export const NEW_CHAT = "NEW_CHAT";
 export const REQUESTED_CHAT = "REQUESTED_CHAT";
+export const USER_IS_WRITING = "USER_IS_WRITING";
+export const USER_STOPPED_WRITING = "USER_STOPPED_WRITING";
 
 // CHAT TYPES CONSTANTS
 export const GROUP = "GROUP";

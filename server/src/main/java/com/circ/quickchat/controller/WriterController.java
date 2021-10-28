@@ -3,7 +3,6 @@ package com.circ.quickchat.controller;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import com.circ.quickchat.service.UserService;
 import com.circ.quickchat.utils.communcation.UserUtilCommun;
 import com.circ.quickchat.websocket.WebsocketMessage;
 
-import DTO.UserDTO;
 import constant.MessageType;
 
 @RestController
@@ -32,29 +30,29 @@ public class WriterController {
 	@Autowired
 	private UserService userService;
 	
-	@MessageMapping("/write")
-	public void currentWrite(SimpMessageHeaderAccessor  headerAccessor) {
-		allertUserWriteAction(headerAccessor, MessageType.USER_WRITE);
+	@MessageMapping("/writing")
+	public void currentlyWriting(SimpMessageHeaderAccessor  headerAccessor) {
+		alertUserWriteAction(headerAccessor, MessageType.USER_IS_WRITING);
 	}
 	
 	
-	@MessageMapping("/dontwrite")
-	public void dontWrite(SimpMessageHeaderAccessor  headerAccessor) {
-		allertUserWriteAction(headerAccessor, MessageType.USER_DONT_WRITE);
+	@MessageMapping("/stopped-writing")
+	public void stoppedWriting(SimpMessageHeaderAccessor  headerAccessor) {
+		alertUserWriteAction(headerAccessor, MessageType.USER_STOPPED_WRITING);
 	}
 	
-	private void allertUserWriteAction(SimpMessageHeaderAccessor headerAccessor, MessageType messageType) {
+	private void alertUserWriteAction(SimpMessageHeaderAccessor headerAccessor, MessageType messageType) {
 		String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
 		User userThatWrite = userService.getUserBySessionId(sessionId);
 		Long chatId = userThatWrite.getCurrentChat().getId();
 		Chat chat = chatRepository.findById(chatId)
 				.orElseThrow(() -> new InternalError("Chat with id: " + chatId +
-				" doesn't exist"));
-		WebsocketMessage messageWebsocketMessage = WebsocketMessage.builder().messageType(messageType)
+						" doesn't exist"));
+		WebsocketMessage messageWebsocketsMessage = WebsocketMessage.builder().messageType(messageType)
 				.content(userThatWrite.toUserDTO()).build();
-		userUtilCommun.sendToUsers(messageWebsocketMessage, chat.getUsers()
+		userUtilCommun.sendToUsers(messageWebsocketsMessage, chat.getUsers()
 				.stream().filter(usr -> !usr.getSessionId().equals(sessionId) && usr.getCurrentChat() != null
-				&& usr.getCurrentChat().equals(chat)).map(usr -> usr.getSessionId()).collect(Collectors.toList()));
+						&& usr.getCurrentChat().equals(chat)).map(User::getSessionId).collect(Collectors.toList()));
 	}
 
 }

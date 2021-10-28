@@ -14,18 +14,39 @@ import { WsClientContext } from "../../app/WsClientContext";
 export default function NewMessageBox() {
   const wsClient = React.useContext(WsClientContext);
   const [content, setContent] = React.useState("");
+  const [isWriting, setIsWriting] = React.useState(false);
+  const [timer, setTimer] = React.useState(null);
+  const timeout = 1000;
 
   const profile = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   const onContentChanged = (event) => setContent(event.target.value);
 
+  const startedWriting = () => {
+    if (!isWriting) {
+      setIsWriting(true);
+      wsClient.send("/writing", {}, {});
+    }
+  };
+
+  const stoppedWriting = () => {
+    window.clearTimeout(timer);
+    setTimer(
+      window.setTimeout(() => {
+        console.log("Stopped");
+        wsClient.send("/stopped-writing", {}, {});
+        setIsWriting(false);
+      }, timeout)
+    );
+  };
+
   const onSubmit = () => {
     if (content) {
       const timestamp = Date.now();
       const msg = {
         id: nanoid(),
-        authorId:  profile.userId,
+        authorId: profile.userId,
         authorName: "Me",
         content: content,
         createdAt: timestamp,
@@ -52,6 +73,8 @@ export default function NewMessageBox() {
       value={content}
       sx={{ width: "75%", borderRadius: "50px" }}
       onChange={onContentChanged}
+      onKeyDown={startedWriting}
+      onKeyUp={stoppedWriting}
       maxRows={12}
       multiline={true}
       onKeyPress={(event) => {

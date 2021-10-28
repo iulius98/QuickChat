@@ -2,7 +2,13 @@ import React, { createContext, useState, useEffect } from "react";
 
 import store from "./store";
 import { updateMessagesList, messageAdded } from "../reducers/messagesSlice";
-import { usersListUpdated, userAdded, userDeleted, userUpdated } from "../reducers/usersSlice";
+import {
+  usersListUpdated,
+  userAdded,
+  userDeleted,
+  usernameUpdated,
+  currentyWritingUpdated,
+} from "../reducers/usersSlice";
 import { chatAdded } from "../reducers/chatsSlice";
 import { currentChatChanged, sessionIdChanged, userIdChanged } from "../reducers/profileSlice";
 
@@ -52,7 +58,17 @@ const messageFilter = (message) => {
           break;
 
         case constants.UPDATE_CHAT_USER:
-          store.dispatch(userUpdated(generalMessage.content));
+          store.dispatch(usernameUpdated(generalMessage.content));
+          break;
+
+        case constants.USER_IS_WRITING:
+          console.log(generalMessage);
+          store.dispatch(currentyWritingUpdated({ id: generalMessage.content.id, isWriting: true }));
+          break;
+
+        case constants.USER_STOPPED_WRITING:
+          console.log(generalMessage);
+          store.dispatch(currentyWritingUpdated({ id: generalMessage.content.id, isWriting: false }));
           break;
 
         default:
