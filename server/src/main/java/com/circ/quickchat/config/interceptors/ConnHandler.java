@@ -36,15 +36,12 @@ public class ConnHandler extends WebSocketHandlerDecorator {
 
 	@Autowired
 	private GroupService groupService;
-	
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Autowired
 	private ConversationService conversationService;
 
 	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+	public synchronized void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 
 		String sessionId = (String) session.getAttributes().get("sessionId").toString();
 		User user = userService.getUserBySessionId(sessionId);
